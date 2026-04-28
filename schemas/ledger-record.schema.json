@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/longxianmian/longcode-Entropy-Shear/schemas/ledger-record.schema.json",
+  "title": "LedgerRecord",
+  "description": "One line of ledger/shear-chain.jsonl. Records form a hash chain from sha256:genesis.",
+  "type": "object",
+  "required": [
+    "shear_id", "timestamp", "policy_id", "policy_version",
+    "input_hash", "verdict", "applied_rule_id",
+    "trace_hash", "previous_shear_hash", "current_shear_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "shear_id":            { "type": "string", "pattern": "^entropy-shear-\\d{8}-\\d{6}$" },
+    "timestamp":           { "type": "string", "format": "date-time" },
+    "policy_id":           { "type": "string" },
+    "policy_version":      { "type": "string" },
+    "input_hash":          { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "verdict":             { "type": "string", "enum": ["Yes", "No", "Hold"] },
+    "applied_rule_id":     { "type": ["string", "null"] },
+    "trace_hash":          { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "previous_shear_hash": { "type": "string", "pattern": "^sha256:(genesis|[0-9a-f]{64})$" },
+    "current_shear_hash":  { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

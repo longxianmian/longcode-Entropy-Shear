@@ -1,0 +1,265 @@
+openapi: 3.0.3
+info:
+  title: Entropy Shear API
+  description: |
+    Deterministic tri-state decision engine.
+
+    Given a `policy` and `facts`, returns one of `Yes` / `No` / `Hold`
+    along with a complete trace, a SHA-256 signature, and a `shear_id`
+    that points to an append-only ledger record.
+
+    P1 stable surface — no LLM, no auth, no DB, no rule autogen.
+  version: 1.0.0
+  contact:
+    name: 龙码（广州）数字科技有限公司
+    url: https://github.com/longxianmian/longcode-Entropy-Shear
+servers:
+  - url: http://127.0.0.1:8080
+    description: Local Docker / dev server
+paths:
+  /health:
+    get:
+      summary: Liveness probe.
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is up.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /shear:
+    post:
+      summary: Run a single tri-state decision.
+      operationId: postShear
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShearRequest'
+            examples:
+              cityone:
+                summary: CityOne member-gate (Yes)
+                externalValue: examples/cityone-request.json
+              agent:
+                summary: Agent action (Yes)
+                externalValue: examples/agent-action-request.json
+              ai:
+                summary: AI customer service (Hold)
+                externalValue: examples/ai-customer-service-request.json
+              bid:
+                summary: Bid risk (No)
+                externalValue: examples/bid-risk-request.json
+              gate:
+                summary: Permission gate (Yes)
+                externalValue: examples/permission-gate-request.json
+      responses:
+        '200':
+          description: Decision rendered. Verdict is one of `Yes` / `No` / `Hold`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShearResult'
+        '400':
+          description: Request body is not valid JSON.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example: { error: invalid_json, detail: "unexpected token" }
+        '422':
+          description: Schema violation (policy / facts / unsupported operator).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Ledger append failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ledger/{shear_id}:
+    get:
+      summary: Fetch a single ledger record by shear_id.
+      operationId: getLedgerRecord
+      parameters:
+        - in: path
+          name: shear_id
+          required: true
+          schema:
+            type: string
+            pattern: '^entropy-shear-\d{8}-\d{6}$'
+      responses:
+        '200':
+          description: Record found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LedgerRecord'
+        '404':
+          description: No record matches the given shear_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ledger/verify:
+    get:
+      summary: Re-derive every chained hash from genesis. Returns ok=false on any mismatch.
+      operationId: verifyLedger
+      responses:
+        '200':
+          description: Walk completed. Inspect `ok` and `broken_at`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyResult'
+
+components:
+  schemas:
+    Verdict:
+      type: string
+      enum: [Yes, No, Hold]
+
+    Operator:
+      type: string
+      enum: ['==', '!=', '>', '<', '>=', '<=', in, contains]
+
+    Health:
+      type: object
+      required: [ok, service, version]
+      properties:
+        ok:      { type: boolean }
+        service: { type: string, example: entropy-shear }
+        version: { type: string, example: v1.0.0 }
+
+    Condition:
+      type: object
+      required: [field, operator, value]
+      properties:
+        field:    { type: string, description: Dot-separated path into facts. }
+        operator: { $ref: '#/components/schemas/Operator' }
+        value:
+          description: Right-hand operand. Type depends on operator.
+
+    Rule:
+      type: object
+      required: [id, priority, condition, effect, reason]
+      properties:
+        id:        { type: string }
+        priority:  { type: integer, description: Smaller wins. }
+        condition: { $ref: '#/components/schemas/Condition' }
+        effect:    { $ref: '#/components/schemas/Verdict' }
+        route:     { type: string, description: Optional downstream hint when effect=Yes. }
+        reason:    { type: string }
+
+    Policy:
+      type: object
+      required: [id, version, rules, default_effect, default_reason]
+      properties:
+        id:             { type: string }
+        version:        { type: string }
+        rules:
+          type: array
+          items: { $ref: '#/components/schemas/Rule' }
+        default_effect: { $ref: '#/components/schemas/Verdict' }
+        default_reason: { type: string }
+
+    Facts:
+      type: object
+      additionalProperties: true
+      description: Free-form structured facts. Engine reads via dot-paths.
+
+    ShearRequest:
+      type: object
+      required: [policy, facts]
+      properties:
+        policy: { $ref: '#/components/schemas/Policy' }
+        facts:  { $ref: '#/components/schemas/Facts' }
+
+    TraceItem:
+      type: object
+      required: [rule_id, evaluated, matched, detail]
+      properties:
+        rule_id:   { type: string }
+        evaluated: { type: boolean }
+        matched:   { type: boolean }
+        detail:    { type: string }
+
+    ShearResult:
+      type: object
+      required: [verdict, applied_rule_id, reason, trace, signature, shear_id]
+      properties:
+        verdict:         { $ref: '#/components/schemas/Verdict' }
+        applied_rule_id:
+          type: string
+          nullable: true
+          description: null when no rule matched (default-effect path).
+        route:           { type: string }
+        reason:          { type: string }
+        trace:
+          type: array
+          items: { $ref: '#/components/schemas/TraceItem' }
+        signature:
+          type: string
+          pattern: '^sha256:[0-9a-f]{64}$'
+        shear_id:
+          type: string
+          pattern: '^entropy-shear-\d{8}-\d{6}$'
+
+    LedgerRecord:
+      type: object
+      required:
+        - shear_id
+        - timestamp
+        - policy_id
+        - policy_version
+        - input_hash
+        - verdict
+        - applied_rule_id
+        - trace_hash
+        - previous_shear_hash
+        - current_shear_hash
+      properties:
+        shear_id:            { type: string }
+        timestamp:           { type: string, format: date-time }
+        policy_id:           { type: string }
+        policy_version:      { type: string }
+        input_hash:          { type: string }
+        verdict:             { $ref: '#/components/schemas/Verdict' }
+        applied_rule_id:     { type: string, nullable: true }
+        trace_hash:          { type: string }
+        previous_shear_hash: { type: string }
+        current_shear_hash:  { type: string }
+
+    VerifyResult:
+      type: object
+      required: [ok, total, broken_at]
+      properties:
+        ok:                { type: boolean }
+        total:             { type: integer }
+        broken_at:
+          type: integer
+          nullable: true
+          description: 1-indexed line number of the first inconsistency. null when ok=true.
+        latest_shear_id:   { type: string }
+        latest_hash:       { type: string }
+        detail:            { type: string }
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          enum:
+            - invalid_json
+            - policy_schema_violation
+            - facts_schema_violation
+            - unsupported_operator
+            - ledger_unavailable
+            - service_unavailable
+            - not_found
+        detail:
+          type: string

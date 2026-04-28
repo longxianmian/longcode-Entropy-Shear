@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/longxianmian/longcode-Entropy-Shear/schemas/shear-request.schema.json",
+  "title": "ShearRequest",
+  "description": "POST /shear request body. Pairs a policy with the facts to evaluate.",
+  "type": "object",
+  "required": ["policy", "facts"],
+  "additionalProperties": false,
+  "properties": {
+    "policy": { "$ref": "policy.schema.json" },
+    "facts": {
+      "type": "object",
+      "description": "Free-form structured facts. The engine reads them via dot-paths (e.g. user.profile.level).",
+      "additionalProperties": true
+    }
+  }
+}

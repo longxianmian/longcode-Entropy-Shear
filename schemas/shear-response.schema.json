@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/longxianmian/longcode-Entropy-Shear/schemas/shear-response.schema.json",
+  "title": "ShearResult",
+  "description": "POST /shear response body. Verdict is one of Yes / No / Hold.",
+  "type": "object",
+  "required": ["verdict", "applied_rule_id", "reason", "trace", "signature", "shear_id"],
+  "additionalProperties": false,
+  "properties": {
+    "verdict": { "type": "string", "enum": ["Yes", "No", "Hold"] },
+    "applied_rule_id": {
+      "type": ["string", "null"],
+      "description": "null when no rule matched and the default_effect was applied."
+    },
+    "route":  { "type": "string" },
+    "reason": { "type": "string" },
+    "trace": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "evaluated", "matched", "detail"],
+        "additionalProperties": false,
+        "properties": {
+          "rule_id":   { "type": "string" },
+          "evaluated": { "type": "boolean" },
+          "matched":   { "type": "boolean" },
+          "detail":    { "type": "string" }
+        }
+      }
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "shear_id": {
+      "type": "string",
+      "pattern": "^entropy-shear-\\d{8}-\\d{6}$"
+    }
+  }
+}

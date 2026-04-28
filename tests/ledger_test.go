@@ -179,6 +179,37 @@ func TestGetMissingReturnsNotExist(t *testing.T) {
 	}
 }
 
+func TestVerifyFileOffline(t *testing.T) {
+	l, path := newTestLedger(t)
+	for i := 0; i < 2; i++ {
+		if _, err := l.Append(ledger.AppendInput{
+			Policy:  samplePolicy(),
+			Facts:   schema.Facts{"i": float64(i)},
+			Verdict: schema.Yes,
+			Trace:   []schema.TraceItem{{RuleID: "r", Evaluated: true, Matched: true, Detail: "ok"}},
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	res, err := ledger.VerifyFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !res.OK || res.Total != 2 {
+		t.Errorf("VerifyFile: ok=%v total=%d", res.OK, res.Total)
+	}
+}
+
+func TestVerifyFileOnMissingPathReturnsEmpty(t *testing.T) {
+	res, err := ledger.VerifyFile(filepath.Join(t.TempDir(), "does-not-exist.jsonl"))
+	if err != nil {
+		t.Fatalf("missing path should not error: %v", err)
+	}
+	if !res.OK || res.Total != 0 {
+		t.Errorf("missing path should be ok=true total=0, got %+v", res)
+	}
+}
+
 func TestRecoverPersistsLastHash(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "shear-chain.jsonl")

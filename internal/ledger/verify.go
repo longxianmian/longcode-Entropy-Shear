@@ -27,8 +27,18 @@ type VerifyResult struct {
 func (l *Ledger) Verify() (VerifyResult, error) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
+	return verifyReader(l.path)
+}
 
-	f, err := os.Open(l.path)
+// VerifyFile walks the chain at path without instantiating a stateful
+// Ledger. Suitable for offline / one-shot tooling — does not create
+// directories, does not write, does not hold any internal state.
+func VerifyFile(path string) (VerifyResult, error) {
+	return verifyReader(path)
+}
+
+func verifyReader(path string) (VerifyResult, error) {
+	f, err := os.Open(path)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return VerifyResult{OK: true, Total: 0}, nil

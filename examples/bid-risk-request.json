@@ -1,0 +1,40 @@
+{
+  "policy": {
+    "id": "policy-bid-risk-v1",
+    "version": "1.0.0",
+    "rules": [
+      {
+        "id": "missing-required-file",
+        "priority": 1,
+        "condition": { "field": "bid.required_files_missing_count", "operator": ">", "value": 0 },
+        "effect": "No",
+        "reason": "存在必需文件缺失，不能通过"
+      },
+      {
+        "id": "uncertain-qualification",
+        "priority": 2,
+        "condition": { "field": "qualification.evidence_complete", "operator": "==", "value": false },
+        "effect": "Hold",
+        "reason": "资质证据不完整，需人工复核"
+      },
+      {
+        "id": "all-critical-checks-pass",
+        "priority": 3,
+        "condition": { "field": "risk.critical_issue_count", "operator": "==", "value": 0 },
+        "effect": "Yes",
+        "reason": "关键风险项未发现问题"
+      }
+    ],
+    "default_effect": "Hold",
+    "default_reason": "未命中明确通过或拒绝条件，需人工复核"
+  },
+  "facts": {
+    "bid": {
+      "id": "BID-2026-0428-001",
+      "required_files_missing_count": 2,
+      "missing_files": ["营业执照副本", "近三年审计报告"]
+    },
+    "qualification": { "evidence_complete": false },
+    "risk": { "critical_issue_count": 0 }
+  }
+}

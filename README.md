@@ -1,8 +1,14 @@
-# 熵剪 Entropy Shear · P0
+# 熵剪 Entropy Shear · P0 + P1
 
-> 给 AI 与业务系统加一道**确定性裁决闸门**：输入 `policy + facts`，输出 `Yes / No / Hold` + 完整 trace + 不可篡改 signature + 追加式 ledger。
+> **熵剪 Entropy Shear：生产级 Agent 的轻量三态裁决引擎。**
+>
+> - **LLM / Agent = 理解、规划、生成。**
+> - **熵剪 = 裁决、拦截、暂缓、留痕。**
 
-熵剪不是 AI、不是 LIOS 子模块、不是聊天机器人。它是一个独立的、确定性的三态裁决引擎。本仓库实现技术开发文档 v1.0 的 **P0 范围**。
+输入 `policy + facts`，输出 `Yes / No / Hold` + 完整 trace + 不可篡改 signature + 追加式 ledger。熵剪不是 AI、不是 LIOS 子模块、不是聊天机器人 — 它是一个独立的、确定性的三态裁决引擎，做 Agent / AI 客服 / 风控系统的关键动作闸门。
+
+- **P0**（已冻结，tag `p0-freeze-20260428`）：可运行的裁决内核 — `/shear`、三态、trace、signature、JSONL ledger、Docker、测试。
+- **P1**（当前）：在不破坏 P0 兼容的前提下，补齐 `openapi.yaml`、JSON Schemas、典型场景示例（含 Agent 三态全覆盖）、最小 JS / Python SDK、`cmd/verify-ledger` 离线校验器、测试增强。详见 [§11](#11-p1-产品化增强)。
 
 ---
 
@@ -159,14 +165,26 @@ entropy-shear/
     ledger/                       # JSONL 追加账本 + verify
     signature/                    # 稳定 JSON + SHA-256
     errors/                       # 统一错误码
-  examples/
-    cityone-policy.json           # CityOne 会员准入
-    cityone-request.json          # 完整 POST /shear 请求
-    ai-customer-service-policy.json
-    bid-risk-policy.json
-    agent-action-policy.json
+  cmd/verify-ledger/main.go       # P1：离线账本校验
+  examples/                       # 5 个 POST /shear 完整请求体
+    cityone-request.json          # CityOne 会员准入 → Yes
+    agent-action-request.json     # P1：Agent 动作（只读 → Yes）
+    ai-customer-service-request.json # P1：AI 客服（refund 无单号 → Hold）
+    bid-risk-request.json         # P1：招投标合规（必需文件缺失 → No）
+    permission-gate-request.json  # P1：权限准入（VIP → Yes）
+    *-policy.json                 # 仅 policy 部分（用作组合参考）
+  schemas/                        # P1：JSON Schema 固化
+    policy.schema.json
+    shear-request.schema.json
+    shear-response.schema.json
+    ledger-record.schema.json
+  sdk/                            # P1：最小 HTTP SDK（不做本地裁决）
+    js/                           #   Node 18+ / TypeScript
+    python/                       #   Python 3.9+ stdlib only
+  openapi.yaml                    # P1：OpenAPI 3.0.3 接口规范
   ledger/shear-chain.jsonl        # 账本（运行时生成）
-  tests/                          # 单元测试 + handler 集成测试
+  tests/                          # 单元测试 + handler / examples / schema 测试
+  docs/P1_RELEASE_CHECKLIST.md    # P1 上线检查清单
   Dockerfile
   docker-compose.yml
 ```
@@ -193,3 +211,108 @@ entropy-shear/
 | 账本写入失败 | 503 | `ledger_unavailable` |
 | 系统级不可用 | 503 | `service_unavailable` |
 | 找不到 shear_id | 404 | `not_found` |
+
+---
+
+## 11. P1 产品化增强
+
+P1 在 P0 已冻结基线上**只做加法**：不改 `/shear` 主接口，不动核心裁决逻辑。
+
+### 11.1 OpenAPI 与 JSON Schema
+
+- `openapi.yaml` — 全部 4 个端点的 OpenAPI 3.0.3 规范，可直接喂给 Swagger Editor / openapi-generator。
+- `schemas/policy.schema.json` — Policy 结构（draft 2020-12）。
+- `schemas/shear-request.schema.json` — `POST /shear` 请求体。
+- `schemas/shear-response.schema.json` — `POST /shear` 响应体。
+- `schemas/ledger-record.schema.json` — JSONL 单行记录。
+
+仅描述当前已实现字段，不预留未实现的扩展位。
+
+### 11.2 典型场景示例
+
+每个文件都是完整的 `POST /shear` 请求体（含 policy + canonical facts）。同一个 policy 可通过不同 facts 触发 Yes / No / Hold，详见 `tests/examples_test.go`。
+
+| 文件 | canonical 结果 | 触发的规则 / 默认 |
+|---|---|---|
+| `examples/cityone-request.json`             | `Yes`  | `rule-001`（VIP/member 准入） |
+| `examples/agent-action-request.json`        | `Yes`  | `allow-readonly-action`（兼容示例） |
+| `examples/agent-action-yes-request.json`    | `Yes`  | `allow-readonly-action`（只读查询） |
+| `examples/agent-action-no-request.json`     | `No`   | `forbid-delete-production-data`（删除生产数据） |
+| `examples/agent-action-hold-request.json`   | `Hold` | `hold-payment-action`（转账未人工确认） |
+| `examples/ai-customer-service-request.json` | `Hold` | `need-order-id-before-human` |
+| `examples/bid-risk-request.json`            | `No`   | `missing-required-file` |
+| `examples/permission-gate-request.json`     | `Yes`  | `vip-or-member-allow` |
+
+> **Agent 三态全覆盖**：`agent-action-{yes,no,hold}-request.json` 三个示例分别证明熵剪可以让 Agent 通过、拒绝、暂缓 — 这正是「LLM 负责生成，熵剪负责裁决」的最小可演示集合。
+
+### 11.3 SDK（HTTP 封装，不做本地裁决）
+
+- `sdk/js`：Node 18+ / TypeScript，使用全局 `fetch`，无构建步骤。
+- `sdk/python`：Python 3.9+，仅依赖 stdlib `urllib`。
+
+```ts
+// JS / TypeScript
+import { EntropyShearClient } from "@longcode/entropy-shear-client";
+const client = new EntropyShearClient({ baseUrl: "http://127.0.0.1:8080" });
+const r = await client.shear({ policy, facts });
+```
+
+```python
+# Python
+from entropy_shear_client import EntropyShearClient
+client = EntropyShearClient(base_url="http://127.0.0.1:8080")
+r = client.shear(policy=policy, facts=facts)
+```
+
+详见 [`sdk/js/README.md`](sdk/js/README.md) 和 [`sdk/python/README.md`](sdk/python/README.md)。
+
+### 11.4 离线账本校验
+
+```bash
+go run ./cmd/verify-ledger
+go run ./cmd/verify-ledger -ledger /path/to/shear-chain.jsonl
+```
+
+输出：
+
+```json
+{
+  "ok": true,
+  "total": 3,
+  "broken_at": null,
+  "latest_shear_id": "entropy-shear-20260428-000003",
+  "latest_hash": "sha256:..."
+}
+```
+
+链不一致时退出码为 1，I/O 错误时退出码为 2。**不会创建任何文件或目录**。
+
+### 11.5 P1 验收命令
+
+```bash
+go test ./...
+
+docker compose up -d --build
+curl -s http://127.0.0.1:8080/health
+
+curl -s -X POST http://127.0.0.1:8080/shear \
+  -H 'Content-Type: application/json' \
+  -d @examples/agent-action-request.json | jq
+
+curl -s -X POST http://127.0.0.1:8080/shear \
+  -H 'Content-Type: application/json' \
+  -d @examples/ai-customer-service-request.json | jq
+
+curl -s -X POST http://127.0.0.1:8080/shear \
+  -H 'Content-Type: application/json' \
+  -d @examples/bid-risk-request.json | jq
+
+curl -s http://127.0.0.1:8080/ledger/verify | jq
+go run ./cmd/verify-ledger
+```
+
+详细清单见 [`docs/P1_RELEASE_CHECKLIST.md`](docs/P1_RELEASE_CHECKLIST.md)。
+
+### 11.6 P1 仍然不做
+
+LLM 调用 · 规则自动生成 · 后台管理系统 · 用户系统 · 权限系统 · 数据库依赖 · 多租户 · LIOS 耦合 · 复杂 DSL · 业务流程硬编码。
