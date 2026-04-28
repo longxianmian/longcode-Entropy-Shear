@@ -1,0 +1,6 @@
+{
+  "session": { "id": "sess-20260428-1188", "channel": "wechat" },
+  "intent": { "type": "faq", "raw_text": "你们的会员有什么权益？" },
+  "risk": { "category": "general" },
+  "knowledge": { "hit_confidence": 0.93, "doc_id": "kb-membership-benefits" }
+}

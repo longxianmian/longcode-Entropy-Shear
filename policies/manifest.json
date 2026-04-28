@@ -1,0 +1,42 @@
+{
+  "manifest_version": "1.0.0",
+  "generated_at": "2026-04-28",
+  "policies": [
+    {
+      "path": "policies/agent/agent-action-policy.v1.json",
+      "policy_id": "policy-agent-action-v1",
+      "policy_version": "1.0.0",
+      "hash": "sha256:d6c00d46eee93061f027a6a23af21439cdb97eadad28a18a498ae976c373cc7e",
+      "scenario": "agent-tool-gate",
+      "maintainer": "longxianmian@gmail.com",
+      "created_at": "2026-04-28"
+    },
+    {
+      "path": "policies/ai-customer-service/ai-customer-service-policy.v1.json",
+      "policy_id": "policy-ai-customer-service-v1",
+      "policy_version": "1.0.0",
+      "hash": "sha256:7d4d20910010ad162c7213edb6a27ccf4abbda9ccf19263ac2faea9c3da19c7f",
+      "scenario": "ai-customer-service-gate",
+      "maintainer": "longxianmian@gmail.com",
+      "created_at": "2026-04-28"
+    },
+    {
+      "path": "policies/bid-risk/bid-risk-policy.v1.json",
+      "policy_id": "policy-bid-risk-v1",
+      "policy_version": "1.0.0",
+      "hash": "sha256:19bb6efb43ccfa5353eaaa513fdc92e231405f7571634dac4a0063852577a466",
+      "scenario": "bid-risk-gate",
+      "maintainer": "longxianmian@gmail.com",
+      "created_at": "2026-04-28"
+    },
+    {
+      "path": "policies/permission-gate/permission-gate-policy.v1.json",
+      "policy_id": "policy-permission-gate-v1",
+      "policy_version": "1.0.0",
+      "hash": "sha256:3dde788d20c477bdc8e356fe8236fd1757b4e86108d377e9bf638ed8808cf7fe",
+      "scenario": "permission-gate",
+      "maintainer": "longxianmian@gmail.com",
+      "created_at": "2026-04-28"
+    }
+  ]
+}

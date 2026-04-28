@@ -1,0 +1,12 @@
+{
+  "name": "entropy-shear-agent-tool-gate-node",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reference Tool Gate for Agent systems built on Entropy Shear (Node).",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "demo": "node example.mjs",
+    "demo:ts": "tsx example.ts"
+  }
+}

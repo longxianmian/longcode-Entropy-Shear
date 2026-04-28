@@ -1,0 +1,6 @@
+{
+  "session": { "id": "sess-20260428-7723", "channel": "web" },
+  "intent": { "type": "refund", "raw_text": "我要退款，订单号忘了" },
+  "risk": { "category": "general" },
+  "knowledge": { "hit_confidence": 0.42 }
+}

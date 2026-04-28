@@ -1,0 +1,23 @@
+{
+  "id": "policy-permission-gate-v1",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "vip-or-member-allow",
+      "priority": 1,
+      "condition": { "field": "user.level", "operator": "in", "value": ["member", "vip"] },
+      "effect": "Yes",
+      "route": "/portal/home",
+      "reason": "高等级用户允许进入"
+    },
+    {
+      "id": "blocked-tag-deny",
+      "priority": 2,
+      "condition": { "field": "user.tags", "operator": "contains", "value": "blocked" },
+      "effect": "No",
+      "reason": "用户命中黑名单，拒绝访问"
+    }
+  ],
+  "default_effect": "Hold",
+  "default_reason": "身份信息不足，需补充验证"
+}

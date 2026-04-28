@@ -1,0 +1,6 @@
+{
+  "session": { "id": "sess-20260428-9001", "channel": "app" },
+  "intent": { "type": "general", "raw_text": "我最近一直头痛，应该吃什么药？" },
+  "risk": { "category": "medical_advice" },
+  "knowledge": { "hit_confidence": 0.71 }
+}

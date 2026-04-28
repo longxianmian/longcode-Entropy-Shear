@@ -1,4 +1,4 @@
-# 熵剪 Entropy Shear · P0 + P1
+# 熵剪 Entropy Shear · P0 + P1 + P2
 
 > **熵剪 Entropy Shear：生产级 Agent 的轻量三态裁决引擎。**
 >
@@ -8,7 +8,8 @@
 输入 `policy + facts`，输出 `Yes / No / Hold` + 完整 trace + 不可篡改 signature + 追加式 ledger。熵剪不是 AI、不是 LIOS 子模块、不是聊天机器人 — 它是一个独立的、确定性的三态裁决引擎，做 Agent / AI 客服 / 风控系统的关键动作闸门。
 
 - **P0**（已冻结，tag `p0-freeze-20260428`）：可运行的裁决内核 — `/shear`、三态、trace、signature、JSONL ledger、Docker、测试。
-- **P1**（当前）：在不破坏 P0 兼容的前提下，补齐 `openapi.yaml`、JSON Schemas、典型场景示例（含 Agent 三态全覆盖）、最小 JS / Python SDK、`cmd/verify-ledger` 离线校验器、测试增强。详见 [§11](#11-p1-产品化增强)。
+- **P1**（tag `v0.1.0-p1`）：在不破坏 P0 兼容的前提下，补齐 `openapi.yaml`、JSON Schemas、典型场景示例（含 Agent 三态全覆盖）、最小 JS / Python SDK、`cmd/verify-ledger` 离线校验器、测试增强。详见 [§11](#11-p1-产品化增强)。
+- **P2**（当前）：把熵剪从「可调用的裁决服务」推进为「可被真实 Agent / AI 客服 / 风控系统接入的治理组件」。新增 policy pack 模板库 + manifest、`cmd/{validate,hash}-policy`、Agent Tool Gate（Node + Python）样板、AI 客服 Gate facts 示例、技术白皮书与接入手册。详见 [§12](#12-p2-接入治理)。
 
 ---
 
@@ -182,6 +183,23 @@ entropy-shear/
     js/                           #   Node 18+ / TypeScript
     python/                       #   Python 3.9+ stdlib only
   openapi.yaml                    # P1：OpenAPI 3.0.3 接口规范
+  cmd/validate-policy/main.go     # P2：校验单个 policy 文件
+  cmd/hash-policy/main.go         # P2：输出 policy 的稳定 hash
+  internal/policy/                # P2：Load / Hash / Manifest 共享逻辑
+  policies/                       # P2：版本化 policy pack 模板库
+    manifest.json                 #   全部 pack + hash 索引
+    agent/                        #   Agent Tool Gate
+    ai-customer-service/          #   AI 客服 Gate
+    bid-risk/                     #   招投标合规
+    permission-gate/              #   企业准入
+  integrations/                   # P2：接入样板（不实现 Agent 本身）
+    agent-tool-gate/{node,python} #   Tool Gate 三态调用样板
+    ai-customer-service-gate/     #   AI 客服 facts 示例
+  docs/                           # P2：白皮书 + 接入手册（4 篇）
+    WHITEPAPER.md
+    INTEGRATION_GUIDE.md
+    POLICY_PACK_GUIDE.md
+    AGENT_TOOL_GATE_GUIDE.md
   ledger/shear-chain.jsonl        # 账本（运行时生成）
   tests/                          # 单元测试 + handler / examples / schema 测试
   docs/P1_RELEASE_CHECKLIST.md    # P1 上线检查清单
@@ -316,3 +334,108 @@ go run ./cmd/verify-ledger
 ### 11.6 P1 仍然不做
 
 LLM 调用 · 规则自动生成 · 后台管理系统 · 用户系统 · 权限系统 · 数据库依赖 · 多租户 · LIOS 耦合 · 复杂 DSL · 业务流程硬编码。
+
+---
+
+## 12. P2 接入治理
+
+P2 不是「再多做一些功能」，而是让熵剪**更容易被真实系统接入**。同样在 P0 / P1 已冻结基线上**只做加法**。
+
+### 12.1 Policy Pack 模板库
+
+`policies/` 是版本化、hash 固化的 policy 包：
+
+```
+policies/
+  manifest.json                       # 全部 pack 的索引 + hash
+  agent/
+    agent-action-policy.v1.json
+    README.md
+  ai-customer-service/
+    ai-customer-service-policy.v1.json
+    README.md
+  bid-risk/
+    bid-risk-policy.v1.json
+    README.md
+  permission-gate/
+    permission-gate-policy.v1.json
+    README.md
+```
+
+每个 pack 的 README 列明：facts 结构、verdict 表、边界、复算命令。`policies/manifest.json` 中 `hash` 字段在 `tests/policy_pack_test.go` 中**每次测试时复算并比对**，任何漂移都会让 CI 失败。
+
+详见 [`docs/POLICY_PACK_GUIDE.md`](docs/POLICY_PACK_GUIDE.md)。
+
+### 12.2 策略校验与版本工具
+
+```bash
+# 任一 pack 都可以离线校验和打 hash
+go run ./cmd/validate-policy --file policies/agent/agent-action-policy.v1.json
+go run ./cmd/hash-policy     --file policies/agent/agent-action-policy.v1.json
+```
+
+输出：
+
+```json
+{ "ok": true, "policy_id": "policy-agent-action-v1", "version": "1.0.0", "rule_count": 3 }
+{ "policy_id": "policy-agent-action-v1", "version": "1.0.0", "hash": "sha256:..." }
+```
+
+非法 policy 会返回 `ok: false` 并退出码 1；I/O 错误退出码 2。`hash-policy` 拒绝为不通过校验的 policy 出 hash。
+
+### 12.3 Agent Tool Gate 样板（不是 Agent 本身）
+
+`integrations/agent-tool-gate/{node,python}` 提供生产级 Agent 接入熵剪的最小样板：
+
+```
+agent.plan() → action → AgentToolGate.gate(action)
+                       → POST /shear → Yes / No / Hold
+                       → execute / refuse / queue-for-human
+```
+
+```bash
+docker compose up -d --build
+node    integrations/agent-tool-gate/node/example.mjs
+python3 integrations/agent-tool-gate/python/example.py
+```
+
+两个样板对相同的三个动作产生 allow / deny / hold 三种 decision。详见 [`docs/AGENT_TOOL_GATE_GUIDE.md`](docs/AGENT_TOOL_GATE_GUIDE.md)。
+
+### 12.4 AI 客服 Gate
+
+`integrations/ai-customer-service-gate/facts-examples/` 配 `policies/ai-customer-service/` 使用：
+
+| 文件 | 预期 verdict | 业务动作 |
+|---|---|---|
+| `refund-missing-order.json` | `Hold` | 要求补充订单号，再转人工 |
+| `high-risk-medical.json`    | `No`   | 拒答，引导专业人士 |
+| `faq-high-confidence.json`  | `Yes`  | AI 渲染答案 |
+
+测试覆盖：`tests/policy_pack_test.go::TestAICustomerServiceFactsExamples`。
+
+### 12.5 P2 文档
+
+| 文档 | 用途 |
+|---|---|
+| [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md) | 三态裁决型 AI 治理引擎的技术与定位说明 |
+| [`docs/INTEGRATION_GUIDE.md`](docs/INTEGRATION_GUIDE.md) | 一小时接入指南：启动 / 调用 / 设计 policy / 处理三态 / 校验 ledger |
+| [`docs/POLICY_PACK_GUIDE.md`](docs/POLICY_PACK_GUIDE.md) | pack 目录约定、manifest 规范、hash 规则、新增 pack 的 lifecycle |
+| [`docs/AGENT_TOOL_GATE_GUIDE.md`](docs/AGENT_TOOL_GATE_GUIDE.md) | Tool Gate 接入模式、action facts 结构、三态处理建议、高风险动作分类 |
+
+### 12.6 P2 验收命令
+
+```bash
+go test ./...
+docker compose up -d --build
+curl -s http://127.0.0.1:8080/health | jq
+curl -s http://127.0.0.1:8080/ledger/verify | jq
+go run ./cmd/verify-ledger
+go run ./cmd/validate-policy --file policies/agent/agent-action-policy.v1.json
+go run ./cmd/hash-policy     --file policies/agent/agent-action-policy.v1.json
+node    integrations/agent-tool-gate/node/example.mjs    # 服务跑起来后
+python3 integrations/agent-tool-gate/python/example.py
+```
+
+### 12.7 P2 仍然不做
+
+LLM 调用 · 规则自动生成 · 后台管理系统 · 用户系统 · 权限系统 · 数据库依赖 · 多租户 SaaS · LIOS 耦合 · 复杂 DSL · 业务流程硬编码。
