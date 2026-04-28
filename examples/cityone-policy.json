@@ -1,0 +1,31 @@
+{
+  "id": "policy-cityone-v1",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "rule-001",
+      "priority": 1,
+      "condition": {
+        "field": "user.level",
+        "operator": "in",
+        "value": ["member", "vip"]
+      },
+      "effect": "Yes",
+      "route": "/campaign/member-landing",
+      "reason": "会员或 VIP 用户允许进入会员活动页"
+    },
+    {
+      "id": "rule-002",
+      "priority": 2,
+      "condition": {
+        "field": "user.tags",
+        "operator": "contains",
+        "value": "blocked"
+      },
+      "effect": "No",
+      "reason": "用户命中黑名单标签，拒绝访问"
+    }
+  ],
+  "default_effect": "Hold",
+  "default_reason": "未命中任何规则，需人工复核"
+}

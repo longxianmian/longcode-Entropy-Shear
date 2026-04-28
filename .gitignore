@@ -1,0 +1,7 @@
+/ledger/*.jsonl
+/bin/
+*.test
+*.out
+*.log
+.DS_Store
+.claude/

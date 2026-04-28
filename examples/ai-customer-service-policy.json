@@ -1,0 +1,41 @@
+{
+  "id": "policy-ai-customer-service-v1",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "need-order-id-before-human",
+      "priority": 1,
+      "condition": {
+        "field": "intent.type",
+        "operator": "in",
+        "value": ["refund", "complaint", "after_sale"]
+      },
+      "effect": "Hold",
+      "reason": "售后、退款、投诉类问题需先提供订单号后再转人工"
+    },
+    {
+      "id": "forbidden-medical-advice",
+      "priority": 2,
+      "condition": {
+        "field": "risk.category",
+        "operator": "==",
+        "value": "medical_advice"
+      },
+      "effect": "No",
+      "reason": "禁止 AI 输出医疗建议，需拒答或提示咨询专业人士"
+    },
+    {
+      "id": "faq-answerable",
+      "priority": 3,
+      "condition": {
+        "field": "knowledge.hit_confidence",
+        "operator": ">=",
+        "value": 0.85
+      },
+      "effect": "Yes",
+      "reason": "知识库命中置信度足够，允许 AI 回答"
+    }
+  ],
+  "default_effect": "Hold",
+  "default_reason": "证据不足，需转人工或补充信息"
+}

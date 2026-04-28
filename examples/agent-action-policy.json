@@ -1,0 +1,41 @@
+{
+  "id": "policy-agent-action-v1",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "forbid-delete-production-data",
+      "priority": 1,
+      "condition": {
+        "field": "action.name",
+        "operator": "==",
+        "value": "delete_production_data"
+      },
+      "effect": "No",
+      "reason": "禁止 Agent 删除生产数据"
+    },
+    {
+      "id": "hold-payment-action",
+      "priority": 2,
+      "condition": {
+        "field": "action.category",
+        "operator": "==",
+        "value": "payment"
+      },
+      "effect": "Hold",
+      "reason": "支付相关动作必须人工确认"
+    },
+    {
+      "id": "allow-readonly-action",
+      "priority": 3,
+      "condition": {
+        "field": "action.mode",
+        "operator": "==",
+        "value": "readonly"
+      },
+      "effect": "Yes",
+      "reason": "只读动作允许执行"
+    }
+  ],
+  "default_effect": "Hold",
+  "default_reason": "未知动作，进入人工复核"
+}

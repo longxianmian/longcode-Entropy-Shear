@@ -1,0 +1,19 @@
+services:
+  entropy-shear:
+    build: .
+    image: entropy-shear:v1.0.0
+    container_name: entropy-shear
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./ledger:/app/ledger
+    environment:
+      ENTROPY_SHEAR_ADDR: ":8080"
+      ENTROPY_SHEAR_LEDGER: "/app/ledger/shear-chain.jsonl"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
