@@ -13,6 +13,38 @@
 
 ---
 
+## 版本边界 / 产品线
+
+**当前仓库是 Entropy Shear Core — 开源标准版（熵剪标准版）。**
+
+熵剪标准版 / Core 是开源的确定性三态裁决引擎。
+
+**Core 包含：**
+- Yes / Hold / No 三态裁决
+- policy + facts 输入契约
+- `/shear` API
+- 裁决 trace
+- 防篡改 JSONL 账本
+- 策略包
+- SDK 与集成示例
+
+**Core 故意不包含：**
+- 龙码常数
+- AI 规则编译器
+- 五元素冲突治理
+- 影子模式
+- 多租户 SaaS
+- 业务流程后台
+- 用户 / 权限 / 租户系统
+
+**这些能力属于后续商业版本：**
+- **熵剪 Pro 版** = Core + 龙码常数
+- **熵剪旗舰版** = Pro + 五元素冲突治理 + AI 规则编译器 + 影子模式 + 高级审计账本
+
+完整版本矩阵见 [`docs/PRODUCT_MATRIX.md`](docs/PRODUCT_MATRIX.md)；商业版本咨询见 [`SUPPORT.md`](SUPPORT.md)。
+
+---
+
 ## 为什么需要它
 
 | 你的痛点 | 熵剪的解法 |
@@ -244,13 +276,16 @@ go run ./cmd/hash-policy     --file policies/agent/agent-action-policy.v1.json
 
 ## 开发状态
 
-当前版本：**`v0.2.0-p2`**（P0 + P1 + P2）
+当前版本：**`v0.3.0-p3`**（P0 + P1 + P2 + P3）
+
+**本次发布即 Entropy Shear Core / 熵剪标准版** — Apache 2.0、仅含确定性三态引擎。Pro / Flagship 路线图详见上方 [版本边界](#版本边界--产品线)。
 
 | 阶段 | 标签 | 交付 |
 |---|---|---|
 | **P0** *（已冻结）* | `p0-freeze-20260428` | 裁决内核 — `/shear`、三态、trace、signature、JSONL ledger、Docker、单测 |
 | **P1**             | `v0.1.0-p1`          | OpenAPI 3.0.3、JSON Schemas、JS / Python SDK、离线 `cmd/verify-ledger`、Agent 三态全覆盖示例 |
-| **P2** *（当前）*  | `v0.2.0-p2`          | 版本化 policy pack + manifest、`cmd/{validate,hash}-policy`、Agent Tool Gate 样板（Node + Python）、AI 客服 Gate、4 篇开发文档 |
+| **P2**             | `v0.2.0-p2`          | 版本化 policy pack + manifest、`cmd/{validate,hash}-policy`、Agent Tool Gate 样板（Node + Python）、AI 客服 Gate、4 篇开发文档 |
+| **P3** *（当前）*  | `v0.3.0-p3`          | Apache 2.0 重新授权、面向采纳的 README + `README_CN.md` + `SUPPORT.md`、Core/Pro/Flagship 版本边界（`docs/PRODUCT_MATRIX.md`） |
 
 完整发布说明与验收命令：[`docs/P1_RELEASE_CHECKLIST.md`](docs/P1_RELEASE_CHECKLIST.md)、[`docs/INTEGRATION_GUIDE.md`](docs/INTEGRATION_GUIDE.md)。
 

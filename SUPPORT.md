@@ -4,6 +4,10 @@
 >
 > 熵剪核心引擎采用 [Apache 2.0](LICENSE) 开源，包括商业用途在内全部免费。本页面面向需要部署伙伴、SLA 保障、定制策略包，或 Apache 2.0 之外的额外许可的团队。
 
+> **Edition scope:** The open-source repository contains **Entropy Shear Core** only. **Pro** and **Flagship** capabilities are commercial editions and are not part of the Apache 2.0 open-source core. See [`docs/PRODUCT_MATRIX.md`](docs/PRODUCT_MATRIX.md) for the full edition boundary.
+>
+> **版本范围**：本开源仓库**仅包含 Entropy Shear Core（标准版 / 开源版）**。**Pro** 与 **Flagship** 属于商业版本，不在 Apache 2.0 开源核心之内。完整边界见 [`docs/PRODUCT_MATRIX.md`](docs/PRODUCT_MATRIX.md)。
+
 ---
 
 ## Contact · 联系方式
@@ -77,6 +81,26 @@ The same hard limits that govern the open-source engine apply to every commercia
 This isn't a marketing position; it's a deliberate engineering boundary. The verdict path stays deterministic, auditable, and replayable, no matter how the commercial wrapper evolves.
 
 商业服务同样保持核心边界：永远不引入 LLM 调用、不自动生成规则、不在我方服务器持久化原始业务数据、不耦合特定平台。这不是市场口号，是工程约束 — 让裁决路径在任何商业包装下都保持确定性、可审计、可复算。
+
+---
+
+## Commercial editions roadmap · 商业版本路线
+
+The commercial tiers extend Core; they never replace its deterministic kernel. The full edition matrix lives in [`docs/PRODUCT_MATRIX.md`](docs/PRODUCT_MATRIX.md).
+
+| Edition | Adds on top of | Headline capability | Status |
+|---|---|---|---|
+| **Entropy Shear Pro** | Core | **Longma Constant** — goal-locked AI governance | Commercial; not implemented in this repository |
+| **Entropy Shear Flagship** | Pro | five-element conflict governance + AI rule compiler + shadow mode + advanced audit ledger | Commercial; not implemented in this repository |
+
+商业版本在 Core 之上叠加，永远不替换 Core 的确定性内核。完整边界见 [`docs/PRODUCT_MATRIX.md`](docs/PRODUCT_MATRIX.md)。
+
+| 版本 | 在哪一档之上叠加 | 核心增量 | 状态 |
+|---|---|---|---|
+| **Entropy Shear Pro 版** | Core | **龙码常数（Longma Constant）** — 目标锁定型 AI 治理 | 商业版；本仓库未实现 |
+| **Entropy Shear Flagship 旗舰版** | Pro 版 | 五元素冲突治理 + AI 规则编译器 + 影子模式 + 高级审计账本 | 商业版；本仓库未实现 |
+
+For inquiries about Pro / Flagship licensing, deployment, or pre-release access: [longxianmian@gmail.com](mailto:longxianmian@gmail.com).
 
 ---
 

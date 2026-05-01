@@ -13,6 +13,38 @@ Read this in **English** · [中文](README_CN.md)
 
 ---
 
+## Edition Boundary / Product Line
+
+**This repository is Entropy Shear Core — the open-source standard edition.**
+
+Entropy Shear Core is the open-source deterministic tri-state decision engine.
+
+**Core includes:**
+- deterministic Yes / Hold / No verdicts
+- policy + facts input contract
+- `/shear` API
+- traceable decisions
+- tamper-evident JSONL ledger
+- policy packs
+- SDKs and integration examples
+
+**Core intentionally does not include:**
+- Longma Constant
+- AI rule compiler
+- five-element conflict governance
+- shadow mode
+- multi-tenant SaaS
+- business workflow backend
+- user / auth / tenant system
+
+**These capabilities belong to future commercial editions:**
+- **Entropy Shear Pro** = Core + Longma Constant
+- **Entropy Shear Flagship** = Pro + five-element conflict governance + AI rule compiler + shadow mode + advanced audit ledger
+
+For the full edition matrix see [`docs/PRODUCT_MATRIX.md`](docs/PRODUCT_MATRIX.md). For commercial-edition inquiries see [`SUPPORT.md`](SUPPORT.md).
+
+---
+
 ## Why you need this
 
 | Your problem | How Entropy Shear solves it |
@@ -244,13 +276,16 @@ go run ./cmd/hash-policy     --file policies/agent/agent-action-policy.v1.json
 
 ## Development status
 
-Current version: **`v0.2.0-p2`** (P0 + P1 + P2)
+Current version: **`v0.3.0-p3`** (P0 + P1 + P2 + P3)
+
+**This release is Entropy Shear Core / 熵剪标准版** — Apache 2.0, deterministic three-state engine only. See [Edition Boundary](#edition-boundary--product-line) above for the Pro / Flagship roadmap.
 
 | Stage | Tag | Delivered |
 |---|---|---|
 | **P0** *(frozen)* | `p0-freeze-20260428` | Verdict kernel — `/shear`, three-state, trace, signature, JSONL ledger, Docker, tests |
 | **P1**            | `v0.1.0-p1`          | OpenAPI 3.0.3 spec, JSON Schemas, JS / Python SDKs, offline `cmd/verify-ledger`, Agent tri-state examples |
-| **P2** *(current)*| `v0.2.0-p2`          | Versioned policy packs + manifest, `cmd/validate-policy` + `cmd/hash-policy`, Agent Tool Gate samples (Node + Python), AI Customer Service Gate, four developer guides |
+| **P2**            | `v0.2.0-p2`          | Versioned policy packs + manifest, `cmd/validate-policy` + `cmd/hash-policy`, Agent Tool Gate samples (Node + Python), AI Customer Service Gate, four developer guides |
+| **P3** *(current)*| `v0.3.0-p3`          | Apache 2.0 relicense, adoption-focused README + `README_CN.md` + `SUPPORT.md`, Core/Pro/Flagship edition boundaries (`docs/PRODUCT_MATRIX.md`) |
 
 Full P2 release notes and acceptance commands: [`docs/P1_RELEASE_CHECKLIST.md`](docs/P1_RELEASE_CHECKLIST.md), [`docs/INTEGRATION_GUIDE.md`](docs/INTEGRATION_GUIDE.md).
 
