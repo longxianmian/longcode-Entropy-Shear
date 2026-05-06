@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://entropy-shear.local/schemas/flagship-gateway/count-tokens-response.schema.json",
+  "title": "Flagship Coder Gateway Count Tokens Response",
+  "description": "POST /v1/messages/count_tokens response. P0 returns only input_tokens.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["input_tokens"],
+  "properties": {
+    "input_tokens": {"type": "integer", "minimum": 0}
+  }
+}

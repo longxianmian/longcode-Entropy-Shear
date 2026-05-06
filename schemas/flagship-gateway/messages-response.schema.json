@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://entropy-shear.local/schemas/flagship-gateway/messages-response.schema.json",
+  "title": "Flagship Coder Gateway Messages Response",
+  "description": "POST /v1/messages response body, P0 minimal subset (GD-2). Verdict and gateway_audit are entropy-shear extensions on top of the Anthropic-compatible shape.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "type",
+    "role",
+    "content",
+    "model",
+    "stop_reason",
+    "stop_sequence",
+    "usage",
+    "verdict"
+  ],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "type": {"type": "string", "enum": ["message"]},
+    "role": {"type": "string", "enum": ["assistant"]},
+    "content": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type"],
+        "properties": {
+          "type": {"type": "string", "enum": ["text"]},
+          "text": {"type": "string"}
+        }
+      }
+    },
+    "model": {"type": "string"},
+    "stop_reason": {"type": "string", "enum": ["end_turn", "refusal", "max_tokens"]},
+    "stop_sequence": {"type": ["string", "null"]},
+    "usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_tokens", "output_tokens"],
+      "properties": {
+        "input_tokens": {"type": "integer", "minimum": 0},
+        "output_tokens": {"type": "integer", "minimum": 0}
+      }
+    },
+    "verdict": {"type": "string", "enum": ["YES", "HOLD", "NO"]},
+    "gateway_audit": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": [
+        "gateway_id",
+        "request_id",
+        "pre_reasoner_audit",
+        "provider_name",
+        "verdict",
+        "timestamp"
+      ],
+      "properties": {
+        "gateway_id": {"type": "string"},
+        "request_id": {"type": "string"},
+        "pre_reasoner_audit": {"type": "object"},
+        "post_reasoner_audit": {"type": "object"},
+        "provider_name": {"type": "string"},
+        "provider_trace_id": {"type": "string"},
+        "verdict": {"type": "string", "enum": ["YES", "HOLD", "NO"]},
+        "timestamp": {"type": "string"}
+      }
+    }
+  }
+}

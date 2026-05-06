@@ -1,0 +1,12 @@
+{
+  "model": "flagship-coder-mock-1",
+  "system": "you are a helpful coding assistant",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "how many tokens does this message use?"}
+      ]
+    }
+  ]
+}

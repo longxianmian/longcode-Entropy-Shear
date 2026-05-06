@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://entropy-shear.local/schemas/flagship-gateway/models-response.schema.json",
+  "title": "Flagship Coder Gateway Models Response",
+  "description": "GET /v1/models response. P0 returns a single mock model entry per GD-9.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["data"],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "display_name"],
+        "properties": {
+          "id": {"type": "string"},
+          "type": {"type": "string", "enum": ["model"]},
+          "display_name": {"type": "string"}
+        }
+      }
+    }
+  }
+}
