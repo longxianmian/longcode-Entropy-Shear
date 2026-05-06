@@ -1,0 +1,24 @@
+{
+  "request_id": "req-yes-001",
+  "goal": {
+    "id": "g-001",
+    "description": "approve member-tier landing page launch",
+    "priority": "p1"
+  },
+  "facts": [
+    {"id": "f-001", "key": "user.tier", "value": "vip", "source": "crm"},
+    {"id": "f-002", "key": "campaign.start_date", "value": "2026-05-10", "source": "ops"}
+  ],
+  "evidence": [
+    {"id": "e-001", "kind": "audit-trail", "reference": "audit://2026-04-29-vip-segment", "confidence": 0.95, "verified": true},
+    {"id": "e-002", "kind": "load-test-report", "reference": "loadtest://2026-05-01", "confidence": 0.92, "verified": true}
+  ],
+  "constraints": [
+    {"id": "c-001", "kind": "policy", "severity": "hard", "statement": "campaign must be approved by legal", "satisfied": true},
+    {"id": "c-002", "kind": "compliance", "severity": "soft", "statement": "respect quiet hours", "satisfied": true}
+  ],
+  "actions": [
+    {"id": "a-001", "name": "publish member-tier landing page", "reversible": true, "cost": 0.2}
+  ],
+  "risk": "low"
+}

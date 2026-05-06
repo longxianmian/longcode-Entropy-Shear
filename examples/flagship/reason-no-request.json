@@ -1,0 +1,21 @@
+{
+  "request_id": "req-no-001",
+  "goal": {
+    "id": "g-100",
+    "description": "drop user account on demand",
+    "priority": "p1"
+  },
+  "facts": [
+    {"id": "f-100", "key": "user.id", "value": "u-9001"}
+  ],
+  "evidence": [
+    {"id": "e-100", "kind": "support-ticket", "reference": "support://ticket/9001", "confidence": 0.8, "verified": true}
+  ],
+  "constraints": [
+    {"id": "c-100", "kind": "permission", "severity": "hard", "statement": "operator must hold admin role", "satisfied": false}
+  ],
+  "actions": [
+    {"id": "a-100", "name": "delete user account", "reversible": false, "cost": 0.9}
+  ],
+  "risk": "high"
+}

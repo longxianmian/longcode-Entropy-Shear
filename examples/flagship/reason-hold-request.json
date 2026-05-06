@@ -1,0 +1,20 @@
+{
+  "request_id": "req-hold-001",
+  "goal": {
+    "id": "g-050",
+    "priority": "p2"
+  },
+  "facts": [
+    {"id": "f-050", "key": "campaign.id", "value": "c-2026-q2-pilot"}
+  ],
+  "evidence": [
+    {"id": "e-050", "kind": "user-self-report", "reference": "support://ticket/3142", "confidence": 0.3, "verified": false}
+  ],
+  "constraints": [
+    {"id": "c-050", "kind": "compliance", "severity": "soft", "statement": "operations should run within quiet hours", "satisfied": null}
+  ],
+  "actions": [
+    {"id": "a-050", "name": "expand campaign to second region", "reversible": true, "cost": 0.7}
+  ],
+  "risk": "medium"
+}

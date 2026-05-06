@@ -63,7 +63,7 @@
       "modify_listed_file"
     ],
     "rollover_writes_in_this_anchor_round": {
-      "note": "本锚点滚动轮（即把 single_goal / allowed_files / 配套软约束文档同步到熵剪旗舰版 P0 开发软约束）属于锚点滚动操作本身，会写入下列五份元文件，但本轮不允许创建任何 allowed_files 中的代码或文档文件。锚点写入完成后，下一次写动作必须严格落入 allowed_files。",
+      "note": "锚点滚动阶段已完成（同步 single_goal / allowed_files / 配套软约束文档至熵剪旗舰版 P0 开发软约束）。当前已进入正式开发阶段，写动作必须严格落入 allowed_files。",
       "files": [
         "LONGMA_TASK_ANCHOR.json",
         "LONGMA_SOFT_GUARD.md",
@@ -71,6 +71,36 @@
         "AGENTS.md",
         ".claude/settings.json"
       ]
+    }
+  },
+
+  "flagship_p0_dev_progress": {
+    "round_1": {
+      "status": "implemented",
+      "issued_at": "2026-05-06",
+      "branch": "feat/flagship-p0-reasoner",
+      "decisions_applied": ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8"],
+      "delivered_components": [
+        "多源输入标准结构（reasoner.Input + mapper 类型）",
+        "五元映射器（mapper.Map）",
+        "原子校验规则执行器（rules.Apply）",
+        "5×5 状态评估矩阵（state.DefaultMatrix，R1 数值锁定）",
+        "五元干涉模型 Lite（state.Relation / InteractionFactor，R2 因子锁定）",
+        "加权冲突消解（state.Compute，λ=0.20 μ=1.00 T1=0.70 T2=0.35，R3 锁定）",
+        "三态状态机 YES / HOLD / NO（state.Compute，硬冲突 override）",
+        "HOLD 动态对齐任务生成（hold.Generate，HOLD 至少一条）",
+        "PermitToken / RejectInstruction（output.NewPermitToken / NewRejectInstruction，无签名无 ledger）",
+        "AuditRecord 结构（output.NewAuditRecord，SHA-256 digest，不写盘）",
+        "HTTP 服务（cmd/flagship-server，POST /flagship/reason，默认 :9090，env ENTROPY_SHEAR_FLAGSHIP_ADDR）",
+        "JSON Schema 与 YES/HOLD/NO 三组示例",
+        "mapper / state-fsm / e2e 三组测试"
+      ],
+      "core_touched": false,
+      "policies_manifest_touched": false,
+      "openapi_or_sdk_touched": false,
+      "external_llm_called": false,
+      "new_dependency_introduced": false,
+      "go_module_touched": false
     }
   },
 
