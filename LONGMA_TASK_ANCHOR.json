@@ -1,45 +1,54 @@
 {
   "schema": "longma.task-anchor/v0",
-  "scope_id": "flagship-p0-reasoner",
-  "scope_kind": "flagship-p0-development-anchor",
+  "scope_id": "flagship-p1-hardening",
+  "scope_kind": "flagship-p1-development-anchor",
   "issued_at": "2026-05-06",
   "repository": "entropy-shear",
   "repository_edition": "Flagship development branch (closed-source, on top of Apache-2.0 Core)",
-  "repository_version_at_issue": "v0.3.0-p3",
+  "repository_version_at_issue": "v0.4.0-flagship-p0",
   "main_branch": "main",
-  "current_branch_at_issue": "feat/flagship-p0-reasoner",
+  "current_branch_at_issue": "feat/flagship-p1-hardening",
 
   "core_product_boundary": {
     "is_core_product_feature": false,
     "enters_policies_dir": false,
     "enters_policies_manifest": false,
     "represents_core_implements_longma_constant": false,
-    "note": "本锚点治理熵剪旗舰版（Flagship）P0 龙码三态逻辑推理内核的开发过程，不属于 Entropy Shear Core 的对外能力。它不修改 Core 引擎、policies、对外契约（API / Schema / SDK / OpenAPI）或产品文档。Longma Constant / 龙码三态逻辑推理内核仍仅属于 Pro / Flagship 路线，未来若与 Core 拼装也通过独立模块或独立分发，详见 docs/PRODUCT_MATRIX.md 与 README.md 的 Edition Boundary 段落。"
+    "note": "本锚点治理熵剪旗舰版（Flagship）P1 第一轮小修加固的开发过程，依然不属于 Entropy Shear Core 的对外能力。它不修改 Core 引擎、policies、对外契约（API / Schema / SDK / OpenAPI）或产品文档。Longma Constant / 龙码三态逻辑推理内核仍仅属于 Pro / Flagship 路线，未来若与 Core 拼装也通过独立模块或独立分发，详见 docs/PRODUCT_MATRIX.md 与 README.md 的 Edition Boundary 段落。"
   },
 
   "target_constant": {
-    "single_goal": "在不破坏现有 Entropy Shear Core 的前提下，开发熵剪旗舰版 P0 的龙码三态逻辑推理内核最小可运行版本（Minimum Verifiable Reasoner）。",
+    "single_goal": "在不破坏 Core、不改变 P0 主契约、不引入新依赖的前提下，对熵剪旗舰版 P0 MVR 做第一轮小修加固（FLAGSHIP_P1_HARDENING_ROUND_1，限 H1–H5 共 5 项）。",
     "current_round_deliverables_only": [
       "internal/flagship/**",
       "cmd/flagship-server/**",
-      "schemas/flagship/**",
-      "examples/flagship/**",
       "tests/flagship/**",
+      "docs/FLAGSHIP_P0_FREEZE_REPORT.md",
       "docs/FLAGSHIP_P0_DEV.md",
       "LONGMA_TASK_ANCHOR.json"
     ],
     "non_goals": [
-      "不开发完整龙码AIOS",
-      "不开发 LLM Gateway",
       "不接入真实 LLM",
+      "不开发 LLM Gateway",
+      "不开发完整龙码 AIOS",
       "不开发知识资产化操作系统",
       "不开发能力工具系统",
       "不开发后台管理系统",
       "不做多租户 SaaS",
       "不做规则自动生成",
-      "不改现有 Core /shear 接口",
-      "不改现有 policy + facts 裁决逻辑",
-      "不改现有 ledger / signature / policy pack 行为",
+      "不接入 Core ledger（含 internal/ledger / ledger/）",
+      "不接入 Core signature（含 internal/signature）",
+      "不做鉴权 / 限流 / TLS",
+      "不引入 jsonschema 等任何新依赖",
+      "不引入任何新依赖（不 go get / 不 go mod tidy 引入新包 / 不升级既有依赖）",
+      "不修改 go.mod / go.sum",
+      "不修改 Core /shear（含 internal/api、internal/engine、internal/schema、internal/policy、internal/errors）",
+      "不修改 policies/manifest.json",
+      "不修改 openapi.yaml",
+      "不修改 sdk/**",
+      "不修改 Dockerfile / docker-compose.yml",
+      "不改变 P0 主契约（请求 / 响应 JSON 形状、verdict 大写 YES / HOLD / NO、矩阵数值、λ μ T1 T2、风险因子、AlignmentTask 字段、PermitToken / RejectInstruction / AuditRecord 字段）",
+      "不在 P1 第一轮纳入 H1–H5 之外的任何加固 / 扩展 / 重构",
       "不把龙码常数作为 Core 版正式能力发布"
     ]
   },
@@ -48,9 +57,8 @@
     "allowed_files": [
       "internal/flagship/**",
       "cmd/flagship-server/**",
-      "schemas/flagship/**",
-      "examples/flagship/**",
       "tests/flagship/**",
+      "docs/FLAGSHIP_P0_FREEZE_REPORT.md",
       "docs/FLAGSHIP_P0_DEV.md",
       "LONGMA_TASK_ANCHOR.json"
     ],
@@ -58,12 +66,11 @@
       "read_existing_files_for_verification",
       "list_existing_directories_for_verification",
       "grep_existing_files_for_verification",
-      "create_new_directory_under_allowed_files",
-      "create_new_file_under_allowed_files",
-      "modify_listed_file"
+      "modify_listed_file",
+      "create_new_file_under_allowed_files"
     ],
     "rollover_writes_in_this_anchor_round": {
-      "note": "锚点滚动阶段已完成（同步 single_goal / allowed_files / 配套软约束文档至熵剪旗舰版 P0 开发软约束）。当前已进入正式开发阶段，写动作必须严格落入 allowed_files。",
+      "note": "本锚点滚动轮（即把 single_goal / allowed_files / 配套软约束文档同步到熵剪旗舰版 P1 第一轮小修加固软约束）属于锚点滚动操作本身，会写入下列五份元文件，但本轮不允许创建或修改任何 allowed_files 中的代码 / 测试 / docs 文件。锚点写入完成后，下一次写动作（即正式 P1 第一轮代码 / 测试 / docs 修改）必须严格落入 allowed_files。",
       "files": [
         "LONGMA_TASK_ANCHOR.json",
         "LONGMA_SOFT_GUARD.md",
@@ -72,6 +79,79 @@
         ".claude/settings.json"
       ]
     }
+  },
+
+  "flagship_p1_scope": {
+    "round_1_note": "P1 第一轮小修加固只允许实现以下 5 项（H1–H5）；任何超出 5 项范围的改动（含新加 P0 之外能力、新增对外契约、扩展 schema / examples、引入依赖、对接 Core 任何模块、做鉴权 / 限流 / TLS、做 LLM Gateway / 多租户 / 规则自动生成 / 完整龙码 AIOS / 知识资产化 / 能力工具系统 / 后台管理）都属于目标漂移并立即 HOLD。任一组件的实现必须严格落入 authorization_radius.allowed_files。本轮（锚点滚动轮）不实现任何一项。",
+    "round_1_items": [
+      {
+        "id": "P1-H1",
+        "title": "HTTP handler 测试覆盖",
+        "covers": "405 method-not-allowed、bad JSON 解析失败、DisallowUnknownFields 严格字段、/health 端点 GET / 非 GET 行为",
+        "files_in_scope": ["cmd/flagship-server/**", "tests/flagship/**"]
+      },
+      {
+        "id": "P1-H2",
+        "title": "NO low-score 分支测试",
+        "covers": "Score < T2 且无硬冲突时输出 NO；reason_code 必须覆盖 FLAGSHIP_REASONER_NO_LOW_SCORE",
+        "files_in_scope": ["tests/flagship/**"]
+      },
+      {
+        "id": "P1-H3",
+        "title": "NormalizedWeights map copy",
+        "covers": "state.Compute 返回的 NormalizedWeights 必须是副本，避免共享传入 map 的引用",
+        "files_in_scope": ["internal/flagship/state/**", "tests/flagship/**"]
+      },
+      {
+        "id": "P1-H4",
+        "title": "RejectInstruction ID 内容指纹",
+        "covers": "output.NewRejectInstruction 生成的 ID 必须纳入 conflicting_items 内容摘要，不得只依赖 len(conflicts)",
+        "files_in_scope": ["internal/flagship/output/**", "tests/flagship/**"]
+      },
+      {
+        "id": "P1-H5",
+        "title": "CanonicalJSON error trace",
+        "covers": "reasoner 中 CanonicalJSON 返回 error 不得静默忽略；出错时必须写入 trace 或 fallback digest reason",
+        "files_in_scope": ["internal/flagship/reasoner/**", "internal/flagship/output/**", "tests/flagship/**"]
+      }
+    ],
+    "round_1_explicitly_excluded": [
+      "不接入真实 LLM",
+      "不做 LLM Gateway",
+      "不做完整龙码 AIOS",
+      "不接 Core ledger",
+      "不接 Core signature",
+      "不做鉴权",
+      "不做限流",
+      "不做 TLS",
+      "不引入 jsonschema 依赖",
+      "不引入任何新依赖",
+      "不修改 go.mod / go.sum",
+      "不修改 Core /shear",
+      "不修改 policies/manifest.json",
+      "不修改 openapi.yaml",
+      "不修改 SDK",
+      "不修改 Docker"
+    ]
+  },
+
+  "flagship_p0_scope": {
+    "status": "frozen",
+    "note": "P0 内核范围已在 v0.4.0-flagship-p0 冻结；此字段保留为历史参考，不再扩展。详见 docs/FLAGSHIP_P0_FREEZE_REPORT.md。",
+    "components": [
+      "多源输入标准结构",
+      "五元映射器：Goal / Fact / Evidence / Constraint / Action",
+      "原子校验规则执行器",
+      "内部状态计算",
+      "5×5 状态评估矩阵",
+      "五元干涉模型 Lite",
+      "加权冲突消解",
+      "三态状态机：YES / HOLD / NO",
+      "HOLD 动态对齐任务生成",
+      "permit_token / reject_instruction",
+      "审计记录结构",
+      "最小测试用例"
+    ]
   },
 
   "flagship_p0_dev_progress": {
@@ -127,24 +207,6 @@
     ]
   },
 
-  "flagship_p0_scope": {
-    "note": "熵剪旗舰版 P0 龙码三态逻辑推理内核开发范围，仅作为目标边界声明；任一组件的实现必须严格落入 authorization_radius.allowed_files。本轮（锚点滚动轮）不实现任何一项。",
-    "components": [
-      "多源输入标准结构",
-      "五元映射器：Goal / Fact / Evidence / Constraint / Action",
-      "原子校验规则执行器",
-      "内部状态计算",
-      "5×5 状态评估矩阵",
-      "五元干涉模型 Lite",
-      "加权冲突消解",
-      "三态状态机：YES / HOLD / NO",
-      "HOLD 动态对齐任务生成",
-      "permit_token / reject_instruction",
-      "审计记录结构",
-      "最小测试用例"
-    ]
-  },
-
   "forbidden_boundaries": {
     "forbidden_paths": [
       "internal/api/**",
@@ -159,6 +221,7 @@
       "cmd/validate-policy/**",
       "cmd/verify-ledger/**",
       "schemas/*.json",
+      "schemas/flagship/**",
       "sdk/**",
       "policies/**",
       "integrations/**",
@@ -171,6 +234,7 @@
       "tests/*.go",
       "ledger/**",
       "examples/*.json",
+      "examples/flagship/**",
       "README.md",
       "README_CN.md",
       "SUPPORT.md",
@@ -184,12 +248,14 @@
       "LONGMA_SOFT_GUARD.md",
       ".gitignore"
     ],
-    "forbidden_paths_note": "forbidden_paths 与 authorization_radius.allowed_files 互为闭包：内核代码只能落入 internal/flagship/**、cmd/flagship-server/**、schemas/flagship/**、examples/flagship/**、tests/flagship/**；新增旗舰版 dev 文档只能写到 docs/FLAGSHIP_P0_DEV.md。所有既有 Core 代码、对外契约、产品文档、构建产物与 .gitignore 一律不得改动；AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 三份配套软约束文档已与本锚点对齐，正式开发轮中也不得再修改它们（再改需要先做新一轮锚点滚动）。",
+    "forbidden_paths_note": "P1 第一轮 forbidden_paths 与 authorization_radius.allowed_files 互为闭包：内核小修加固代码只能落入 internal/flagship/**、cmd/flagship-server/**、tests/flagship/**；docs 端只能改 docs/FLAGSHIP_P0_FREEZE_REPORT.md 与 docs/FLAGSHIP_P0_DEV.md。schemas/flagship/** 与 examples/flagship/** 在 P0 已冻结，本轮不再允许扩展 / 修改（这是 P1 第一轮相对于 P0 第一轮的关键收紧）。所有既有 Core 代码、对外契约、产品文档、构建产物与 .gitignore 一律不得改动；AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 三份配套软约束文档自本锚点起继续列入 forbidden_paths，正式开发轮中不得再修改它们（再改必须先做新一轮锚点滚动）。",
     "forbidden_action_kinds": [
       "modify_existing_core_engine",
       "modify_shear_api",
       "modify_openapi",
       "modify_existing_schemas_files",
+      "modify_flagship_schemas_dir",
+      "modify_flagship_examples_dir",
       "modify_or_add_policy_pack",
       "modify_policies_manifest",
       "modify_integrations",
@@ -202,9 +268,14 @@
       "modify_agents_md_or_claude_md_or_soft_guard",
       "modify_gitignore",
       "introduce_new_dependency",
+      "introduce_jsonschema_or_runtime_validator",
+      "change_p0_main_contract",
+      "expand_round_1_beyond_h1_to_h5",
       "production_deployment",
       "read_dotenv_or_secrets",
       "call_external_llm_or_model_api",
+      "implement_auth_rate_limit_or_tls",
+      "wire_core_ledger_or_signature",
       "git_commit_without_explicit_user_instruction",
       "git_push_without_explicit_user_instruction",
       "git_tag_or_release_without_explicit_user_instruction",
@@ -218,42 +289,46 @@
       "id": "AP1-goal-drift",
       "name_zh": "目标漂移",
       "description": "在执行过程中悄悄扩展、迁移或替换本轮目标。",
-      "rule": "本轮 single_goal 是 P0 龙码三态逻辑推理内核 MVR；任何把它扩张为 LLM Gateway / 多租户 SaaS / 规则自动生成 / 知识资产化操作系统 / 能力工具系统 / 后台管理 / 完整龙码 AIOS 的尝试，都必须先停下并显式请用户授权。"
+      "rule": "本轮 single_goal 是 P1 第一轮小修加固（限 H1–H5 共 5 项）；任何把它扩张为 LLM Gateway / 多租户 SaaS / 规则自动生成 / 知识资产化操作系统 / 能力工具系统 / 后台管理 / 完整龙码 AIOS、或在 P1 第一轮中加入 H1–H5 之外的任何加固 / 扩展 / 重构、或回头改 P0 主契约 / 数值常量、或对接 Core ledger / signature / policies、或引入鉴权 / 限流 / TLS / 任何新依赖的尝试，都必须先停下并显式请用户授权。"
     },
     {
       "id": "AP2-action-overreach",
       "name_zh": "行动越权",
       "description": "未经用户当轮显式指令对禁止路径或外部系统执行写动作。",
-      "rule": "禁止对 forbidden_boundaries.forbidden_paths 写入；禁止 git commit / push / tag / release / 改 CI / 改外部依赖；禁止接入真实 LLM；禁止读取 .env / secrets。"
+      "rule": "禁止对 forbidden_boundaries.forbidden_paths 写入；禁止 git commit / push / tag / release / 改 CI / 改外部依赖；禁止接入真实 LLM；禁止读取 .env / secrets；禁止 go get / go mod tidy 引入新包；禁止 schemas/flagship/** 与 examples/flagship/** 写入。"
     },
     {
       "id": "AP3-path-drift",
       "name_zh": "路径漂移",
       "description": "对真实不存在的目录或文件进行操作；或路径凭空臆造。",
-      "rule": "任何写入前必须先用 Read / ls / find 在真实仓库验证父目录存在；不得依赖记忆中的路径。internal/flagship、cmd/flagship-server、schemas/flagship、examples/flagship、tests/flagship 在本锚点发布时尚未创建，第一次写入需显式 mkdir -p 并对用户透明。"
+      "rule": "任何写入前必须先用 Read / ls / find 在真实仓库验证父目录存在；不得依赖记忆中的路径。本轮 internal/flagship、cmd/flagship-server、tests/flagship 均已存在（P0 已落地），不得自行新增 internal/longma 或 cmd/longma-server 等错误路径。"
     },
     {
       "id": "AP4-hallucinated-judgment",
       "name_zh": "幻觉判断",
       "description": "凭空假设接口签名、函数行为、模块结构、字段名、版本号、文档原文。",
-      "rule": "不得引用未经 Read / grep 验证的代码、接口、字段、配置或文档片段；任何主张必须能给出文件路径与行号佐证；严禁参照训练数据中的“熵剪 / 龙码常数 / 三态推理”印象。"
+      "rule": "不得引用未经 Read / grep 验证的代码、接口、字段、配置或文档片段；任何主张必须能给出文件路径与行号佐证；严禁参照训练数据中的“熵剪 / 龙码常数 / 三态推理”印象；P0 主契约（矩阵数值、λ μ T1 T2、风险因子、verdict 大写、字段名）以 v0.4.0-flagship-p0 实际仓库为准。"
     },
     {
       "id": "AP5-talk-only-completion",
       "name_zh": "嘴炮完成",
       "description": "声称完成而无可验证证据。",
-      "rule": "完成必须给出 changed_files、git diff --stat、go build / go test 输出（至少跑过 flagship 子模块）、边界检查、风险与 HOLD 项；任一项缺失视为未完成。"
+      "rule": "完成必须给出 changed_files、git diff --stat、go build / go vet / go test ./tests/flagship/... / go test ./... 输出、JSON 校验输出、边界检查、风险与 HOLD 项；任一项缺失视为未完成。"
     }
   ],
 
   "hold_conditions": [
     "拟动作目标超出 target_constant.single_goal 的本轮范围（例如要做 LLM Gateway / 多租户 / 规则自动生成 / 完整龙码 AIOS）。",
+    "拟动作要在 P1 第一轮纳入 H1–H5 之外的任何加固 / 扩展 / 重构。",
     "拟修改文件不在 authorization_radius.allowed_files 内。",
-    "拟修改文件落在 forbidden_boundaries.forbidden_paths 内。",
+    "拟修改文件落在 forbidden_boundaries.forbidden_paths 内（含 schemas/flagship/** 与 examples/flagship/**）。",
+    "拟改动会改变 P0 主契约（请求 / 响应 JSON 形状、verdict 大写、矩阵数值、λ μ T1 T2、风险因子、AlignmentTask / PermitToken / RejectInstruction / AuditRecord 字段）。",
     "需要新增产品级能力、policy pack、动 Core 引擎或修改 Core 对外契约。",
     "需要 git commit / push / tag / release，但用户当轮没有显式指令。",
     "需要接入真实 LLM 或调用外部模型 API。",
-    "需要新增依赖（go get / go mod tidy 引入新包）或升级既有依赖。",
+    "需要新增依赖（go get / go mod tidy 引入新包，含 jsonschema 等）或升级既有依赖。",
+    "需要对接 Core ledger / signature。",
+    "需要做鉴权 / 限流 / TLS。",
     "无法用 Read / ls / grep 在真实仓库中验证某个被引用的文件 / 接口 / 字段 / 路径。",
     "缺少 completion_evidence_required 中任一项。"
   ],
@@ -263,15 +338,18 @@
     "任何对仓库结构的论断前，先用 ls / find 在真实目录验证。",
     "引用接口签名 / 字段名 / 错误码 / 版本号前，先用 grep / Read 在真实代码或 schema 中验证。",
     "对 README / docs 现有产品说明的复述必须基于当下 Read，不得依赖记忆。",
+    "P0 主契约（矩阵数值、λ μ T1 T2、风险因子、verdict 大写、字段名、reason_code）以 v0.4.0-flagship-p0 实际仓库为准；不得改、不得猜。",
     "不得参照训练数据中的“熵剪 / 龙码常数 / 三态推理”印象，一切以仓库当前文件为准。"
   ],
 
   "completion_evidence_required": [
-    "changed_files: 本轮新增 / 修改的全部文件清单及用途（含 mkdir -p 创建的新目录）。",
+    "changed_files: 本轮新增 / 修改的全部文件清单及用途。",
     "git_diff_stat: git diff --stat（含 untracked 列举）输出。",
-    "checks: 至少 go build ./internal/flagship/... ./cmd/flagship-server/... 与 go test ./tests/flagship/... 各跑一次的输出（含通过 / 失败列表）。",
-    "boundary_check: 是否触碰 forbidden_paths、是否修改 Core 引擎、是否修改 policies/manifest.json、是否动 Core /shear 接口、是否接入真实 LLM、是否引入新依赖。",
-    "next_stage_readiness: 是否可以进入“熵剪旗舰版 P1”或下一阶段，以及若进入需先做哪些锚点滚动。",
+    "checks: 至少 go build ./internal/flagship/... ./cmd/flagship-server/...、go vet ./internal/flagship/... ./cmd/flagship-server/... ./tests/flagship/...、go test ./tests/flagship/... 与 go test ./... 各跑一次的输出（含通过 / 失败列表）。",
+    "p0_contract_check: 实测 P0 主契约未被破坏（矩阵数值仍由 TestDefaultMatrixFixed 守门、verdict 仍为 YES / HOLD / NO 大写、AlignmentTask / PermitToken / RejectInstruction / AuditRecord 字段未减）。",
+    "boundary_check: 是否触碰 forbidden_paths、是否修改 Core 引擎 / policies/manifest.json / openapi.yaml / sdk / Docker、是否动 Core /shear、是否接入真实 LLM / Core ledger / Core signature、是否引入新依赖、是否动 go.mod / go.sum、是否在 H1–H5 之外做了加固。",
+    "round_1_items_status: H1 / H2 / H3 / H4 / H5 每项的实现状态（已实现 / 未实现 / 部分实现）+ 触达文件 + 对应测试。",
+    "next_stage_readiness: 是否可以进入“熵剪旗舰版 P1 第二轮”或下一阶段，以及若进入需先做哪些锚点滚动。",
     "risks_and_holds: 风险、待澄清项、HOLD 项。"
   ],
 
@@ -279,6 +357,6 @@
     "human_readable_charter": "LONGMA_SOFT_GUARD.md",
     "agent_entrypoints": ["AGENTS.md", "CLAUDE.md"],
     "machine_guard": ".claude/settings.json",
-    "note": "AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 已与本锚点同步至“熵剪旗舰版 P0 开发软约束”表述；这三份配套文档自本锚点起列入 forbidden_paths，正式开发轮中不得再修改（再改必须先做新一轮锚点滚动）。.claude/settings.json 的 permissions.deny 兜底已与本锚点 forbidden_paths 对齐，并对 internal/flagship/**、cmd/flagship-server/**、schemas/flagship/**、examples/flagship/**、tests/flagship/**、docs/FLAGSHIP_P0_DEV.md 让出可写空间。"
+    "note": "AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 已与本锚点同步至“熵剪旗舰版 P1 第一轮小修加固软约束”表述；这三份配套文档自本锚点起继续列入 forbidden_paths，正式开发轮中不得再修改（再改必须先做新一轮锚点滚动）。.claude/settings.json 的 permissions.deny 兜底已与本锚点 forbidden_paths 对齐：内核 P1 dev 路径（internal/flagship/**、cmd/flagship-server/**、tests/flagship/**、docs/FLAGSHIP_P0_FREEZE_REPORT.md、docs/FLAGSHIP_P0_DEV.md）让出可写空间；schemas/flagship/** 与 examples/flagship/** 自本轮起被显式 deny，体现 P0 冻结相对 P1 的契约收紧。"
   }
 }

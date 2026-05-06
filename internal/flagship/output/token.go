@@ -7,7 +7,7 @@ package output
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"strconv"
+	"strings"
 	"time"
 )
 
@@ -57,6 +57,11 @@ func NewPermitToken(requestID, auditID, reasonCode string, scope []string, now t
 
 // NewRejectInstruction builds a RejectInstruction bound to the given audit
 // record. remediationSteps must be a non-nil string slice (R5).
+//
+// The id incorporates a content fingerprint of the conflicting_items list
+// (joined with a delimiter that cannot appear inside an item id by
+// convention) so that two rejects with the same request/audit/reason but
+// different conflict contents resolve to different ids.
 func NewRejectInstruction(requestID, auditID, reasonCode string, conflicting, remediation []string) RejectInstruction {
 	if conflicting == nil {
 		conflicting = []string{}
@@ -64,8 +69,9 @@ func NewRejectInstruction(requestID, auditID, reasonCode string, conflicting, re
 	if remediation == nil {
 		remediation = []string{}
 	}
+	conflictsFingerprint := strings.Join(conflicting, "\x1f") // unit separator
 	return RejectInstruction{
-		ID:               "rej-" + shortHash(requestID+"|"+auditID+"|"+reasonCode+"|"+strconv.Itoa(len(conflicting))),
+		ID:               "rej-" + shortHash(requestID+"|"+auditID+"|"+reasonCode+"|"+conflictsFingerprint),
 		Verdict:          "NO",
 		ReasonCode:       reasonCode,
 		ConflictingItems: conflicting,

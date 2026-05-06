@@ -47,13 +47,15 @@ func reasonAt(in Input, now time.Time) Output {
 	comp := state.Compute(states, weights, ruleRes.HardPenalty, ruleRes.HasHardConflict)
 
 	// 5. Build audit record. Canonical JSON inputs are computed on the
-	//    structured forms so digest is reproducible.
-	inputBytes, _ := output.CanonicalJSON(in)
-	statesBytes, _ := output.CanonicalJSON(struct {
+	//    structured forms so digest is reproducible. On encoding errors we
+	//    fall back to a stable sentinel byte sequence per kind and write a
+	//    trace line — never silently swallow the error (P1-H5).
+	inputBytes, trace := canonicalOrFallback(in, "input", trace)
+	statesBytes, trace := canonicalOrFallback(struct {
 		States  mapper.ElementStates `json:"element_states"`
 		Weights map[string]float64   `json:"normalized_weights"`
-	}{States: states, Weights: weights})
-	matrixBytes, _ := output.CanonicalJSON(state.DefaultMatrix)
+	}{States: states, Weights: comp.NormalizedWeights}, "five_element", trace)
+	matrixBytes, trace := canonicalOrFallback(state.DefaultMatrix, "matrix", trace)
 	audit := output.NewAuditRecord(requestID, inputBytes, statesBytes, matrixBytes,
 		ruleRes.TriggeredRuleIDs, string(comp.Verdict), now)
 
@@ -62,7 +64,7 @@ func reasonAt(in Input, now time.Time) Output {
 		Verdict:           comp.Verdict,
 		Score:             comp.Score,
 		ElementStates:     states,
-		NormalizedWeights: weights,
+		NormalizedWeights: comp.NormalizedWeights,
 		AuditRecord:       audit,
 		Trace:             trace,
 	}
@@ -91,6 +93,19 @@ func reasonAt(in Input, now time.Time) Output {
 	}
 
 	return out
+}
+
+// canonicalOrFallback runs output.CanonicalJSON and, on error, returns a
+// per-kind sentinel byte sequence plus an appended trace line. The sentinel
+// is stable and distinct from the empty-payload digest so audit consumers can
+// detect the fallback by hashing it.
+func canonicalOrFallback(v interface{}, kind string, trace []string) ([]byte, []string) {
+	b, err := output.CanonicalJSON(v)
+	if err == nil {
+		return b, trace
+	}
+	trace = append(trace, "canonical_json_error["+kind+"]: "+err.Error()+"; using fallback digest")
+	return []byte("FLAGSHIP_CANONICAL_JSON_FALLBACK:" + kind), trace
 }
 
 func actionScope(acts []Action) []string {
