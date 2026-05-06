@@ -217,7 +217,7 @@ func Compute(states mapper.ElementStates, weights map[string]float64, hardPenalt
 	return Computation{
 		Score:             score,
 		Verdict:           verdict,
-		NormalizedWeights: weights,
+		NormalizedWeights: copyWeights(weights),
 		WeightedSum:       weighted,
 		InterferenceSum:   interference,
 		HardPenalty:       hardPenalty,
