@@ -1,55 +1,84 @@
 {
   "schema": "longma.task-anchor/v0",
-  "scope_id": "longma-soft-guard-p0",
-  "scope_kind": "development-time-soft-constraint",
+  "scope_id": "flagship-p0-reasoner",
+  "scope_kind": "flagship-p0-development-anchor",
   "issued_at": "2026-05-06",
   "repository": "entropy-shear",
-  "repository_edition": "Core (Apache-2.0)",
+  "repository_edition": "Flagship development branch (closed-source, on top of Apache-2.0 Core)",
   "repository_version_at_issue": "v0.3.0-p3",
   "main_branch": "main",
+  "current_branch_at_issue": "feat/flagship-p0-reasoner",
 
   "core_product_boundary": {
     "is_core_product_feature": false,
     "enters_policies_dir": false,
     "enters_policies_manifest": false,
     "represents_core_implements_longma_constant": false,
-    "note": "本软约束包仅治理 AI 编程代理的开发过程，不属于熵剪 Core 的对外能力，不代表 Core 实现 Longma Constant。Longma Constant 仍然属于 Pro / Flagship 路线，详见 docs/PRODUCT_MATRIX.md 与 README.md 的 Edition Boundary 段落。"
+    "note": "本锚点治理熵剪旗舰版（Flagship）P0 内核的开发过程，不属于 Entropy Shear Core 的对外能力。它不修改 Core 引擎、policies、对外契约（API / Schema / SDK / OpenAPI）或产品文档。Longma Constant / 龙码三态逻辑推理内核仍仅属于 Pro / Flagship 路线，未来若与 Core 拼装也通过独立模块或独立分发，详见 docs/PRODUCT_MATRIX.md 与 README.md 的 Edition Boundary 段落。"
   },
 
   "target_constant": {
-    "single_goal": "在现有 Entropy Shear Core 之上准备开发熵剪旗舰版（Flagship），但本轮只建立开发期软约束包 P0，不开发任何核心代码。",
+    "single_goal": "在不破坏现有 Entropy Shear Core 的前提下，开发熵剪旗舰版 P0 的龙码三态逻辑推理内核最小可运行版本。",
     "current_round_deliverables_only": [
       "LONGMA_TASK_ANCHOR.json",
-      "LONGMA_SOFT_GUARD.md",
-      "AGENTS.md",
-      "CLAUDE.md",
       ".claude/settings.json"
     ],
     "non_goals": [
-      "实现 Longma Constant 进 Core",
-      "实现五行冲突治理 / AI 规则编译器 / 影子模式 / 高级审计账本",
-      "修改三态判定逻辑或任何 Core 引擎代码",
-      "新增 Core 产品 policy pack 或更新 policies/manifest.json",
-      "改动 Core 对外契约（API / Schema / SDK / OpenAPI）",
-      "改动产品文档（README / README_CN / SUPPORT / docs/）",
-      "改动构建与发布产物（Dockerfile / docker-compose / go.mod / go.sum）"
+      "不开发完整龙码AIOS",
+      "不开发 LLM Gateway",
+      "不接入真实 LLM",
+      "不开发知识资产化操作系统",
+      "不开发能力工具系统",
+      "不开发后台管理系统",
+      "不做多租户 SaaS",
+      "不做规则自动生成",
+      "不改现有 Core /shear 接口",
+      "不改现有 policy + facts 裁决逻辑",
+      "不改现有 ledger / signature / policy pack 行为",
+      "不把龙码常数作为 Core 版正式能力发布"
     ]
   },
 
   "authorization_radius": {
     "allowed_files": [
       "LONGMA_TASK_ANCHOR.json",
-      "LONGMA_SOFT_GUARD.md",
-      "AGENTS.md",
-      "CLAUDE.md",
       ".claude/settings.json"
     ],
     "allowed_action_kinds": [
       "read_existing_files_for_verification",
       "list_existing_directories_for_verification",
       "grep_existing_files_for_verification",
-      "create_listed_file",
       "modify_listed_file"
+    ],
+    "next_round_reserved_paths_for_flagship_p0": {
+      "note": "以下路径为熵剪旗舰版 P0 第一轮代码开发的授权预留区域；本轮一律不允许创建或修改其中任何文件。机器兜底（.claude/settings.json）已为这些路径预留可写空间，待下一轮锚点正式启动时再由代码动作实际触达。",
+      "paths": [
+        "internal/flagship/**",
+        "cmd/flagship-server/**",
+        "schemas/flagship/**",
+        "examples/flagship/**",
+        "tests/flagship/**",
+        "docs/FLAGSHIP_P0_DEV.md",
+        "LONGMA_TASK_ANCHOR.json"
+      ]
+    }
+  },
+
+  "flagship_p0_scope": {
+    "note": "下一轮开始的熵剪旗舰版 P0 龙码三态逻辑推理内核开发范围，仅作为目标边界声明，本轮不实现任何一项。",
+    "components": [
+      "多源输入标准结构",
+      "五元映射器：Goal / Fact / Evidence / Constraint / Action",
+      "原子校验规则执行器",
+      "内部状态计算",
+      "5×5 状态评估矩阵",
+      "五元干涉模型 Lite",
+      "加权冲突消解",
+      "三态状态机：YES / HOLD / NO",
+      "HOLD 动态对齐任务生成",
+      "permit_token / reject_instruction",
+      "审计记录结构",
+      "最小测试用例"
     ]
   },
 
@@ -64,6 +93,7 @@
       "docs/**",
       "tests/**",
       "ledger/**",
+      "examples/**",
       "README.md",
       "README_CN.md",
       "SUPPORT.md",
@@ -71,25 +101,37 @@
       "go.mod",
       "go.sum",
       "Dockerfile",
-      "docker-compose.yml"
+      "docker-compose.yml",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "LONGMA_SOFT_GUARD.md",
+      ".gitignore"
     ],
+    "forbidden_paths_note": "本轮 forbidden_paths 中 internal/**、cmd/**、schemas/**、examples/**、tests/**、docs/** 也覆盖了 next_round_reserved_paths_for_flagship_p0 中的所有旗舰版子路径——本轮一律不得对其执行任何写动作。机器兜底（.claude/settings.json）只是为下一轮启动预留可写空间，并不构成本轮的授权。",
     "forbidden_action_kinds": [
-      "modify_engine_code",
+      "modify_existing_core_engine",
+      "modify_shear_api",
+      "modify_openapi",
+      "modify_existing_schemas_files",
       "modify_or_add_policy_pack",
       "modify_policies_manifest",
-      "modify_schemas",
-      "modify_openapi",
+      "modify_integrations",
       "modify_sdk",
-      "modify_integration_examples",
-      "modify_product_docs_or_readme",
+      "modify_ledger_files",
       "modify_dockerfile_or_compose",
+      "modify_readme_or_readme_cn_or_support",
       "modify_go_module_files",
+      "modify_agents_md_or_claude_md_or_soft_guard",
+      "modify_gitignore",
+      "introduce_new_dependency",
+      "production_deployment",
+      "read_dotenv_or_secrets",
       "git_commit_without_explicit_user_instruction",
       "git_push_without_explicit_user_instruction",
       "git_tag_or_release_without_explicit_user_instruction",
-      "install_or_upgrade_packages_without_explicit_user_instruction",
       "delete_or_rewrite_files_in_forbidden_paths",
-      "ci_or_external_system_changes"
+      "ci_or_external_system_changes",
+      "create_any_flagship_code_or_doc_in_this_round"
     ]
   },
 
@@ -98,13 +140,13 @@
       "id": "AP1-goal-drift",
       "name_zh": "目标漂移",
       "description": "在执行过程中悄悄扩展、迁移或替换本轮目标。",
-      "rule": "凡偏离 target_constant.single_goal 或越出 authorization_radius 的动作，必须先停下并显式请用户授权。"
+      "rule": "本轮 single_goal 是更新锚点与 .claude/settings.json，不是开发旗舰版代码。任何越出该 single_goal 或 authorization_radius.allowed_files 的动作必须先停下并显式请用户授权。"
     },
     {
       "id": "AP2-action-overreach",
       "name_zh": "行动越权",
       "description": "未经用户当轮显式指令对禁止路径或外部系统执行写动作。",
-      "rule": "禁止对 forbidden_boundaries.forbidden_paths 写入；禁止 git commit / push / tag / release / 改 CI / 改外部依赖，除非用户当轮显式指令。"
+      "rule": "禁止对 forbidden_boundaries.forbidden_paths 写入；禁止 git commit / push / tag / release / 改 CI / 改外部依赖；本轮也禁止在 next_round_reserved_paths_for_flagship_p0 中创建任何文件。"
     },
     {
       "id": "AP3-path-drift",
@@ -127,11 +169,11 @@
   ],
 
   "hold_conditions": [
-    "拟动作目标超出 target_constant.single_goal 的本轮范围。",
+    "拟动作目标超出 target_constant.single_goal 的本轮范围（本轮只更新锚点与 .claude/settings.json）。",
     "拟修改文件不在 authorization_radius.allowed_files 内。",
-    "拟修改文件落在 forbidden_boundaries.forbidden_paths 内。",
-    "需要新增产品级能力、policy pack 或动 Core 引擎。",
-    "需要 git commit / push / tag / release 但未获得用户当轮显式指令。",
+    "拟修改文件落在 forbidden_boundaries.forbidden_paths 内（含 next_round_reserved_paths_for_flagship_p0 中尚未启用的所有旗舰版子路径）。",
+    "需要新增产品级能力、policy pack、动 Core 引擎，或修改 Core 对外契约。",
+    "需要 git commit / push / tag / release，但用户当轮没有显式指令。",
     "无法用 Read / ls / grep 在真实仓库中验证某个被引用的文件 / 接口 / 字段 / 路径。",
     "缺少 completion_evidence_required 中任一项。"
   ],
@@ -141,20 +183,23 @@
     "任何对仓库结构的论断前，先用 ls / find 在真实目录验证。",
     "引用接口签名 / 字段名 / 错误码 / 版本号前，先用 grep / Read 在真实代码或 schema 中验证。",
     "对 README / docs 现有产品说明的复述必须基于当下 Read，不得依赖记忆。",
-    "不得参照训练数据中的“熵剪 / 龙码常数”印象，一切以仓库当前文件为准。"
+    "不得参照训练数据中的“熵剪 / 龙码常数 / 三态推理”印象，一切以仓库当前文件为准。"
   ],
 
   "completion_evidence_required": [
     "changed_files: 本轮新增 / 修改的全部文件清单及用途。",
+    "anchor_diff_summary: 锚点字段新旧值变化摘要（scope_id / scope_kind / single_goal / non_goals / allowed_files / next_round_reserved_paths_for_flagship_p0 / forbidden_boundaries）。",
+    "settings_permission_change_summary: .claude/settings.json deny 列表的变化摘要。",
     "git_diff_stat: git diff --stat（含 untracked 列举）输出。",
-    "checks: 执行过的校验命令及结果（本轮以仓库结构 / 路径校验为主，不要求跑 Go 测试）。",
-    "boundary_check: 是否触碰 forbidden_paths、是否修改 policies/manifest.json、是否动 Core 引擎代码。",
+    "boundary_check: 是否触碰 forbidden_paths、是否修改 Core 引擎、是否修改 policies/manifest.json、是否触及 next_round_reserved_paths_for_flagship_p0 中的任何文件。",
+    "next_round_readiness: 是否可以进入“熵剪旗舰版 P0 第一轮代码开发”。",
     "risks_and_holds: 风险、待澄清项、HOLD 项。"
   ],
 
   "companions": {
     "human_readable_charter": "LONGMA_SOFT_GUARD.md",
     "agent_entrypoints": ["AGENTS.md", "CLAUDE.md"],
-    "machine_guard": ".claude/settings.json"
+    "machine_guard": ".claude/settings.json",
+    "note": "本轮 AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 仍为前一轮（longma-soft-guard-p0）原文；本轮不修改它们。其中“当前轮唯一目标 = 建立软约束包 P0”的措辞与本锚点的 single_goal 在字面上不一致，遇冲突以本 JSON 锚点为准（CLAUDE.md / AGENTS.md / LONGMA_SOFT_GUARD.md 自身亦明示“与 MD 冲突时以 JSON 为准”）。这三份配套文档将在“熵剪旗舰版 P0 第一轮代码开发”启动前的下一次锚点滚动中同步更新。"
   }
 }
