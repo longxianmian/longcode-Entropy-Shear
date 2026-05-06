@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://entropy-shear.local/schemas/flagship/reason-output.schema.json",
+  "title": "Flagship P0 Reason Output",
+  "description": "Response payload returned by POST /flagship/reason. Verdict is one of YES / HOLD / NO.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "verdict",
+    "score",
+    "element_states",
+    "normalized_weights",
+    "audit_record"
+  ],
+  "properties": {
+    "request_id": {"type": "string"},
+    "verdict": {"type": "string", "enum": ["YES", "HOLD", "NO"]},
+    "score": {"type": "number"},
+    "element_states": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal", "fact", "evidence", "constraint", "action"],
+      "properties": {
+        "goal": {"type": "number"},
+        "fact": {"type": "number"},
+        "evidence": {"type": "number"},
+        "constraint": {"type": "number"},
+        "action": {"type": "number"}
+      }
+    },
+    "normalized_weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Goal", "Fact", "Evidence", "Constraint", "Action"],
+      "properties": {
+        "Goal": {"type": "number"},
+        "Fact": {"type": "number"},
+        "Evidence": {"type": "number"},
+        "Constraint": {"type": "number"},
+        "Action": {"type": "number"}
+      }
+    },
+    "permit_token": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["id", "verdict", "scope", "valid_until", "reason_code", "audit_id"],
+      "properties": {
+        "id": {"type": "string"},
+        "verdict": {"type": "string", "enum": ["YES"]},
+        "scope": {"type": "array", "items": {"type": "string"}},
+        "valid_until": {"type": "string"},
+        "reason_code": {"type": "string"},
+        "audit_id": {"type": "string"}
+      }
+    },
+    "reject_instruction": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["id", "verdict", "reason_code", "conflicting_items", "remediation_steps", "audit_id"],
+      "properties": {
+        "id": {"type": "string"},
+        "verdict": {"type": "string", "enum": ["NO"]},
+        "reason_code": {"type": "string"},
+        "conflicting_items": {"type": "array", "items": {"type": "string"}},
+        "remediation_steps": {"type": "array", "items": {"type": "string"}},
+        "audit_id": {"type": "string"}
+      }
+    },
+    "alignment_tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "target_element", "reason_code", "gap", "required_action", "prompt", "priority"],
+        "properties": {
+          "id": {"type": "string"},
+          "target_element": {"type": "string", "enum": ["Goal", "Fact", "Evidence", "Constraint", "Action"]},
+          "reason_code": {"type": "string"},
+          "gap": {"type": "string"},
+          "required_action": {"type": "string"},
+          "expected_evidence_kind": {"type": "string"},
+          "prompt": {"type": "string"},
+          "priority": {"type": "string", "enum": ["low", "medium", "high"]}
+        }
+      }
+    },
+    "audit_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "audit_id",
+        "request_id",
+        "input_digest",
+        "five_element_digest",
+        "triggered_rule_ids",
+        "matrix_digest",
+        "state_machine_result",
+        "timestamp"
+      ],
+      "properties": {
+        "audit_id": {"type": "string"},
+        "request_id": {"type": "string"},
+        "input_digest": {"type": "string"},
+        "five_element_digest": {"type": "string"},
+        "triggered_rule_ids": {"type": "array", "items": {"type": "string"}},
+        "matrix_digest": {"type": "string"},
+        "state_machine_result": {"type": "string", "enum": ["YES", "HOLD", "NO"]},
+        "permit_token_id": {"type": "string"},
+        "reject_instruction_id": {"type": "string"},
+        "timestamp": {"type": "string"}
+      }
+    },
+    "trace": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  }
+}

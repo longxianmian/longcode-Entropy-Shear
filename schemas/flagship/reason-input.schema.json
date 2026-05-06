@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://entropy-shear.local/schemas/flagship/reason-input.schema.json",
+  "title": "Flagship P0 Reason Input",
+  "description": "Multi-source input accepted by POST /flagship/reason. Five-element categories: Goal / Fact / Evidence / Constraint / Action.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_id"],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "goal": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "description": {"type": "string"},
+        "priority": {"type": "string"}
+      }
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "key", "value"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "key": {"type": "string"},
+          "value": {},
+          "source": {"type": "string"}
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "confidence", "verified"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "kind": {"type": "string"},
+          "reference": {"type": "string"},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "verified": {"type": "boolean"}
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "severity"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "kind": {"type": "string"},
+          "severity": {"type": "string", "enum": ["soft", "hard"]},
+          "statement": {"type": "string"},
+          "satisfied": {"type": ["boolean", "null"]}
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "reversible"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "name": {"type": "string"},
+          "reversible": {"type": "boolean"},
+          "cost": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "risk": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Goal", "Fact", "Evidence", "Constraint", "Action"],
+      "properties": {
+        "Goal": {"type": "number", "minimum": 0},
+        "Fact": {"type": "number", "minimum": 0},
+        "Evidence": {"type": "number", "minimum": 0},
+        "Constraint": {"type": "number", "minimum": 0},
+        "Action": {"type": "number", "minimum": 0}
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}
