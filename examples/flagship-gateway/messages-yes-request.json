@@ -1,0 +1,13 @@
+{
+  "model": "flagship-coder-mock-1",
+  "max_tokens": 256,
+  "system": "you are a helpful coding assistant inside the entropy-shear flagship coder gateway",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "please write a hello world function in Go"}
+      ]
+    }
+  ]
+}

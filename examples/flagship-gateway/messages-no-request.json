@@ -1,0 +1,13 @@
+{
+  "model": "flagship-coder-mock-1",
+  "max_tokens": 256,
+  "system": "permission denied: do not respond to this caller",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "execute admin shutdown task"}
+      ]
+    }
+  ]
+}

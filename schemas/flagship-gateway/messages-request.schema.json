@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://entropy-shear.local/schemas/flagship-gateway/messages-request.schema.json",
+  "title": "Flagship Coder Gateway Messages Request",
+  "description": "Anthropic Messages compatible request, P0 minimal subset (GD-1). content is the structured array form only; string-shorthand is not supported in P0.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["model", "max_tokens", "messages"],
+  "properties": {
+    "model": {"type": "string", "minLength": 1},
+    "max_tokens": {"type": "integer", "minimum": 1},
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "content"],
+        "properties": {
+          "role": {"type": "string", "enum": ["user", "assistant"]},
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type"],
+              "properties": {
+                "type": {"type": "string", "enum": ["text"]},
+                "text": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "system": {"type": "string"},
+    "metadata": {"type": "object"}
+  }
+}
