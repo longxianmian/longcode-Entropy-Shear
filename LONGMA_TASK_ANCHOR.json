@@ -1,48 +1,44 @@
 {
   "schema": "longma.task-anchor/v0",
-  "scope_id": "flagship-coder-gateway-p0",
-  "scope_kind": "flagship-coder-gateway-development-anchor",
+  "scope_id": "flagship-coder-gateway-p1-claude-e2e",
+  "scope_kind": "flagship-coder-gateway-p1-validation-anchor",
   "issued_at": "2026-05-06",
   "repository": "entropy-shear",
   "repository_edition": "Flagship development branch (closed-source, on top of Apache-2.0 Core)",
-  "repository_version_at_issue": "v0.4.1-flagship-p1-hardening",
+  "repository_version_at_issue": "v0.5.0-flagship-coder-gateway-p0",
   "main_branch": "main",
-  "current_branch_at_issue": "feat/flagship-coder-gateway-p0",
+  "current_branch_at_issue": "feat/flagship-coder-gateway-p1-claude-e2e",
 
   "core_product_boundary": {
     "is_core_product_feature": false,
     "enters_policies_dir": false,
     "enters_policies_manifest": false,
     "represents_core_implements_longma_constant": false,
-    "note": "本锚点治理熵剪旗舰版 + LLM 编程大脑网关 P0 的开发过程，依然不属于 Entropy Shear Core 的对外能力。它不修改 Core 引擎、policies、对外契约（API / Schema / SDK / OpenAPI），不接入任何真实 LLM、不读取任何真实 API key、不动 Core /shear 与 P0/P1 已冻结的旗舰版推理内核源码。Longma Constant / 龙码三态逻辑推理内核与本网关骨架仍仅属于 Pro / Flagship 路线，未来若与 Core 拼装也通过独立模块或独立分发，详见 docs/PRODUCT_MATRIX.md 与 README.md 的 Edition Boundary 段落。"
+    "note": "本锚点治理熵剪旗舰版编程大脑网关 P1 Claude Code 端到端适配验证的开发过程，依然不属于 Entropy Shear Core 的对外能力。它不修改 Core 引擎、policies、对外契约（API / Schema / SDK / OpenAPI），不接入任何真实 LLM、不读取任何真实 API key、不动 Core /shear、不动 P0/P1 已冻结的旗舰版推理内核源码、不动 Gateway P0 已冻结的 schemas 与 dev / freeze 报告。Longma Constant、龙码三态逻辑推理内核与本网关骨架仍仅属于 Pro / Flagship 路线，未来若与 Core 拼装也通过独立模块或独立分发，详见 docs/PRODUCT_MATRIX.md 与 README.md 的 Edition Boundary 段落。"
   },
 
   "target_constant": {
-    "single_goal": "在不破坏 Core、不破坏 Flagship P0/P1 推理内核（v0.4.1-flagship-p1-hardening 已冻结）、不引入真实密钥、不修改现有 /shear 接口的前提下，开发一个可被 Claude Code / Codex 未来接入的编程大脑网关骨架（FLAGSHIP_CODER_GATEWAY_P0）：独立服务、Anthropic Messages 兼容形态最小骨架、生成前与生成后均通过旗舰版 reasoner 治理、占位 mock LLM provider。",
+    "single_goal": "在不接真实 LLM、不读取真实 API key、不破坏 Core、不破坏 Flagship P0/P1 推理内核（v0.4.1-flagship-p1-hardening 已冻结）、不改变 Gateway P0 主接口（v0.5.0-flagship-coder-gateway-p0 已冻结的请求 / 响应 JSON 形状、verdict 大写、stop_reason 取值、GatewayAuditRecord 字段）的前提下，验证 Claude Code 是否可以通过当前网关接口完成最小端到端调用（FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E，限 E1–E9 共 9 项）。",
     "current_round_deliverables_only": [
-      "internal/flagship/gateway/**",
-      "internal/flagship/provider/**",
-      "internal/flagship/coder/**",
       "cmd/flagship-coder-gateway/**",
-      "schemas/flagship-gateway/**",
-      "examples/flagship-gateway/**",
+      "internal/flagship/gateway/**",
+      "internal/flagship/coder/**",
+      "internal/flagship/provider/**",
       "tests/flagship-gateway/**",
-      "docs/FLAGSHIP_CODER_GATEWAY_P0_DEV.md",
+      "examples/flagship-gateway/**",
+      "docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md",
       "LONGMA_TASK_ANCHOR.json"
     ],
     "non_goals": [
-      "不接入真实 Claude / OpenAI / Gemini / Qwen API",
+      "不接真实 Claude / OpenAI / Gemini / Qwen API",
       "不读取任何真实 API key",
       "不写 .env / 不改 .env.* / 不读 secrets/",
-      "不开发完整龙码 AIOS",
-      "不开发知识资产化操作系统",
-      "不开发能力工具系统",
-      "不开发后台管理系统",
-      "不做多租户 SaaS",
-      "不做规则自动生成",
-      "不接入 Core ledger（含 internal/ledger / ledger/）",
-      "不接入 Core signature（含 internal/signature）",
+      "不做真实 API Key 管理（KMS / vault / 任何外部 secret store）",
       "不做鉴权 / 限流 / TLS",
+      "不做 streaming（SSE / chunked transfer）",
+      "不做 tool_use / tool_result（function calling）",
+      "不做 citation / cache_control / thinking / images / documents 等 Anthropic 高级能力",
+      "不做真实 Claude Code 自动替换配置（不动用户机器上的 Claude Code 设置）",
       "不引入任何新依赖（不 go get / 不 go mod tidy 引入新包 / 不升级既有依赖）",
       "不修改 go.mod / go.sum",
       "不修改 Core /shear（含 internal/api、internal/engine、internal/schema、internal/policy、internal/errors）",
@@ -53,25 +49,27 @@
       "不修改 README.md / README_CN.md / SUPPORT.md",
       "不修改 P0/P1 已冻结的旗舰版推理内核源码（internal/flagship/{mapper,rules,state,hold,output,reasoner}/**）",
       "不修改 cmd/flagship-server/**（Flagship reasoner 服务已冻结）",
-      "不修改 tests/flagship/**（P0/P1 测试已冻结）",
-      "不修改 schemas/flagship/** 与 examples/flagship/**（P0 已冻结）",
-      "不修改 既有 docs/FLAGSHIP_P0_DEV.md / FLAGSHIP_P0_FREEZE_REPORT.md / FLAGSHIP_P1_HARDENING_REPORT.md",
-      "不改变 P0/P1 主契约（请求 / 响应 JSON 形状、verdict 大写 YES / HOLD / NO、矩阵数值、λ μ T1 T2、风险因子、AlignmentTask / PermitToken / RejectInstruction / AuditRecord 字段集）",
-      "不在本轮纳入 P0 12 项 (G1–G12) 之外的任何能力 / 扩展 / 重构",
+      "不修改 tests/flagship/**（P0/P1 reasoner 测试已冻结）",
+      "不修改 schemas/flagship/** 与 examples/flagship/**（P0 reasoner 已冻结）",
+      "不修改 schemas/flagship-gateway/**（Gateway P0 schema 已冻结）",
+      "不修改既有 docs/FLAGSHIP_P0_DEV.md / FLAGSHIP_P0_FREEZE_REPORT.md / FLAGSHIP_P1_HARDENING_REPORT.md / FLAGSHIP_CODER_GATEWAY_P0_DEV.md / FLAGSHIP_CODER_GATEWAY_P0_FREEZE_REPORT.md",
+      "不接入 Core ledger（含 internal/ledger / ledger/）",
+      "不接入 Core signature（含 internal/signature）",
+      "不改变 P0/P1 主契约 与 Gateway P0 主接口（请求 / 响应 JSON 形状、verdict 大写 YES / HOLD / NO、矩阵数值、λ μ T1 T2、风险因子、AlignmentTask / PermitToken / RejectInstruction / AuditRecord 字段集、stop_reason 取值、GatewayAuditRecord 字段、HOLD/NO 一律 200 的状态码语义）",
+      "不在本轮纳入 E1–E9 之外的任何能力 / 扩展 / 重构",
       "不把龙码常数作为 Core 版正式能力发布"
     ]
   },
 
   "authorization_radius": {
     "allowed_files": [
-      "internal/flagship/gateway/**",
-      "internal/flagship/provider/**",
-      "internal/flagship/coder/**",
       "cmd/flagship-coder-gateway/**",
-      "schemas/flagship-gateway/**",
-      "examples/flagship-gateway/**",
+      "internal/flagship/gateway/**",
+      "internal/flagship/coder/**",
+      "internal/flagship/provider/**",
       "tests/flagship-gateway/**",
-      "docs/FLAGSHIP_CODER_GATEWAY_P0_DEV.md",
+      "examples/flagship-gateway/**",
+      "docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md",
       "LONGMA_TASK_ANCHOR.json"
     ],
     "allowed_action_kinds": [
@@ -84,7 +82,7 @@
       "create_new_file_under_allowed_files"
     ],
     "rollover_writes_in_this_anchor_round": {
-      "note": "本锚点滚动轮（即把 single_goal / allowed_files / 配套软约束文档同步到熵剪旗舰版 + LLM 编程大脑网关 P0 软约束）属于锚点滚动操作本身，会写入下列五份元文件，但本轮不允许创建或修改任何 allowed_files 中的代码 / 测试 / docs 文件。锚点写入完成后，下一次写动作（即正式 Coder Gateway P0 代码 / 测试 / docs 修改）必须严格落入 allowed_files。",
+      "note": "本锚点滚动轮（即把 single_goal / allowed_files / 配套软约束文档同步到熵剪旗舰版编程大脑网关 P1 Claude Code 端到端适配验证软约束）属于锚点滚动操作本身，会写入下列五份元文件，但本轮不允许创建或修改任何 allowed_files 中的代码 / 测试 / docs 文件。锚点写入完成后，下一次写动作（即正式 P1 第一轮代码 / 测试 / docs 修改）必须严格落入 allowed_files。",
       "files": [
         "LONGMA_TASK_ANCHOR.json",
         "LONGMA_SOFT_GUARD.md",
@@ -95,50 +93,44 @@
     }
   },
 
-  "flagship_coder_gateway_p0_scope": {
-    "round_1_note": "Coder Gateway P0 第一轮只允许实现以下 12 项（G1–G12，对应任务书序号）；任何超出 12 项范围的改动（含接入真实 LLM / 读取真实 key / 改 P0/P1 已冻结的推理内核源码 / 加鉴权 / 限流 / TLS / 引入新依赖 / 对接 Core 任何模块）都属于目标漂移并立即 HOLD。任一组件的实现必须严格落入 authorization_radius.allowed_files。本轮（锚点滚动轮）不实现任何一项。",
+  "flagship_coder_gateway_p1_scope": {
+    "round_1_note": "Coder Gateway P1 第一轮 Claude Code 端到端适配验证只允许实现以下 9 项（E1–E9）；任何超出 9 项范围的改动（含接入真实 LLM / 读取真实 key / 加鉴权 / 限流 / TLS / 实现 streaming / tool_use / 改 P0/P1 已冻结的推理内核源码 / 改 Gateway P0 主接口契约 / 引入新依赖 / 对接 Core 任何模块）都属于目标漂移并立即 HOLD。任一组件的实现必须严格落入 authorization_radius.allowed_files。本轮（锚点滚动轮）不实现任何一项。",
     "round_1_items": [
-      {"id": "G1", "title": "独立网关服务", "covers": "新建 cmd/flagship-coder-gateway 二进制，端口与现有 Flagship reasoner 服务（默认 :9090）和 Core server（默认 :8080）独立；不改 Core server", "files_in_scope": ["cmd/flagship-coder-gateway/**", "internal/flagship/gateway/**"]},
-      {"id": "G2", "title": "Anthropic Messages 兼容形态最小接口骨架", "covers": "请求 / 响应 JSON 与 Claude Code 期待形状对齐（messages、role、content blocks、stop_reason、usage 等最小集），不实现 streaming、tool_use、citation、cache_control 等高级能力", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**", "schemas/flagship-gateway/**"]},
-      {"id": "G3", "title": "GET /health", "covers": "网关存活探针，独立于 Flagship reasoner /health 与 Core /health", "files_in_scope": ["cmd/flagship-coder-gateway/**", "internal/flagship/gateway/**"]},
-      {"id": "G4", "title": "GET /v1/models", "covers": "返回本网关声明的可用 model 列表（占位形态，model id 为本网关自定义）", "files_in_scope": ["internal/flagship/gateway/**"]},
-      {"id": "G5", "title": "POST /v1/messages/count_tokens", "covers": "返回 token 计数估算（占位实现：可用确定性近似如字节数 / N，不接真实 tokenizer）", "files_in_scope": ["internal/flagship/gateway/**"]},
-      {"id": "G6", "title": "POST /v1/messages", "covers": "Anthropic Messages 主端点，串联 G7→G8→G9→G10→G11", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
-      {"id": "G7", "title": "生成前治理：调用旗舰版 reasoner", "covers": "请求进入后先用 internal/flagship/reasoner.Reason() 评估上游意图；HOLD 即返回 alignment_tasks 提示，NO 即返回拒绝结构，YES 才进入 G8", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
-      {"id": "G8", "title": "Mock LLM Provider", "covers": "internal/flagship/provider 下定义 Provider 接口，并实现 MockProvider 返回占位候选；不接真实 LLM、不读真实 key", "files_in_scope": ["internal/flagship/provider/**"]},
-      {"id": "G9", "title": "生成后审查：再次调用旗舰版 reasoner", "covers": "对 mock 返回的候选构造 Input 二次评估（事实性 / 合规 / 可执行性）；HOLD 触发 alignment_tasks，NO 触发拒绝", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
-      {"id": "G10", "title": "Claude Code 可识别的 assistant message 响应", "covers": "把 mock 候选 + 治理结果包装为 assistant role / content blocks 形态，附 stop_reason / usage 占位字段", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
-      {"id": "G11", "title": "审计结构（不写盘）", "covers": "返回前后两次 reasoner 的 AuditRecord 与 verdict、生成 / 拒绝 / HOLD 状态，全部以 Output 结构返回，不写 Core ledger、不写 JSONL", "files_in_scope": ["internal/flagship/gateway/**"]},
-      {"id": "G12", "title": "最小测试用例", "covers": "tests/flagship-gateway 下覆盖 /health、/v1/models、count_tokens、/v1/messages 在 YES / HOLD / NO 三态下的端到端走通", "files_in_scope": ["tests/flagship-gateway/**", "examples/flagship-gateway/**"]}
+      {"id": "E1", "title": "Claude Code 接入本地网关运行说明", "covers": "在 docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md 写出如何让 Claude Code 把 base URL 指向本网关（仅指引，不修改用户机器上的真实 Claude Code 配置）", "files_in_scope": ["docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md"]},
+      {"id": "E2", "title": "验证 GET /v1/models", "covers": "用 curl / Go test 直击 /v1/models，记录 Claude Code 期待的 data 字段形状是否与 P0 GD-9 输出匹配", "files_in_scope": ["tests/flagship-gateway/**", "docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md"]},
+      {"id": "E3", "title": "验证 POST /v1/messages/count_tokens", "covers": "对 GD-6 占位算法的输出形状与 Claude Code 期待对齐；记录差异（如真 Claude Code 期待 cache_creation_input_tokens 等字段时，标注为 P2 决策项）", "files_in_scope": ["tests/flagship-gateway/**", "docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md"]},
+      {"id": "E4", "title": "验证 POST /v1/messages", "covers": "三态（YES / HOLD / NO）端到端走通；至少包含一个真实 Claude Code 风格请求样例（含 system + 多轮 messages + metadata）", "files_in_scope": ["tests/flagship-gateway/**", "examples/flagship-gateway/**", "docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md"]},
+      {"id": "E5", "title": "验证 Claude Code 请求头被接收并忽略", "covers": "anthropic-version / anthropic-beta / authorization / x-api-key / content-type / user-agent / x-app 等 header 必须不导致 4xx；扩展 P0 GD-1 头测试覆盖到更多真实头", "files_in_scope": ["cmd/flagship-coder-gateway/**", "tests/flagship-gateway/**"]},
+      {"id": "E6", "title": "验证 HOLD / NO 统一 HTTP 200 + body.verdict", "covers": "回归测试：无论 verdict 是什么，HTTP status 都是 200；body.verdict ∈ {YES, HOLD, NO}；body.stop_reason 与 GD-3 对齐", "files_in_scope": ["tests/flagship-gateway/**"]},
+      {"id": "E7", "title": "补充最小 e2e 脚本或测试样例", "covers": "在 tests/flagship-gateway 下加入端到端脚本式测试（curl / shell / Go test）覆盖 E2–E6", "files_in_scope": ["tests/flagship-gateway/**", "examples/flagship-gateway/**"]},
+      {"id": "E8", "title": "输出 Claude Code 联调记录文档", "covers": "在 docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md 写出实测情况：Claude Code 哪些字段 / 行为通过、哪些字段 / 行为暴露 P0 不足、哪些项需 P2 决策（如 streaming / tool_use）", "files_in_scope": ["docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md"]},
+      {"id": "E9", "title": "保持 Mock Provider，不接真实 Provider", "covers": "本轮 internal/flagship/provider 维持 MockProvider 不变；不引入 Anthropic / OpenAI / Gemini / Qwen SDK；不读取真实 key", "files_in_scope": ["internal/flagship/provider/**"]}
     ],
     "round_1_explicitly_excluded": [
       "不接真实 Claude / OpenAI / Gemini / Qwen API",
-      "不读取任何真实 API key",
-      "不写 .env / 不改 .env.* / 不读 secrets/",
-      "不开发完整龙码 AIOS",
-      "不开发知识资产化操作系统",
-      "不开发能力工具系统",
-      "不接 Core ledger",
-      "不接 Core signature",
-      "不做鉴权",
-      "不做限流",
-      "不做 TLS",
-      "不引入新依赖",
+      "不读取 .env / .env.* / secrets/**",
+      "不做真实 API Key 管理",
+      "不做鉴权 / 限流 / TLS",
+      "不做 streaming",
+      "不做 tool_use / tool_result",
+      "不做 citation / cache_control / thinking / images / documents",
+      "不做真实 Claude Code 自动替换配置",
+      "不引入任何新依赖",
       "不修改 go.mod / go.sum",
       "不修改 Core /shear",
+      "不修改 P0/P1 已冻结 reasoner",
+      "不修改 Gateway P0 已冻结 schemas / 既有 dev / freeze 报告",
       "不修改 policies/manifest.json",
       "不修改 openapi.yaml",
       "不修改 SDK",
       "不修改 Docker",
-      "不修改 README / SUPPORT",
-      "不修改 P0/P1 已冻结的推理内核源码",
-      "不实现 Anthropic Messages 的 streaming / tool_use / citation / cache_control 等高级能力（仅最小骨架）"
+      "不修改 README / SUPPORT"
     ]
   },
 
   "flagship_p0_scope": {
     "status": "frozen",
-    "note": "P0 内核范围已在 v0.4.0-flagship-p0 冻结；此字段保留为历史参考，不再扩展。详见 docs/FLAGSHIP_P0_FREEZE_REPORT.md。",
+    "note": "P0 内核范围已在 v0.4.0-flagship-p0 冻结；保留为历史参考。详见 docs/FLAGSHIP_P0_FREEZE_REPORT.md。",
     "components": [
       "多源输入标准结构",
       "五元映射器：Goal / Fact / Evidence / Constraint / Action",
@@ -157,13 +149,32 @@
 
   "flagship_p1_scope": {
     "status": "frozen",
-    "round_1_note": "P1 第一轮小修加固已在 v0.4.1-flagship-p1-hardening 冻结（H1–H5）；此字段保留为历史参考，不再扩展。详见 docs/FLAGSHIP_P1_HARDENING_REPORT.md。",
+    "round_1_note": "P1 第一轮小修加固已在 v0.4.1-flagship-p1-hardening 冻结（H1–H5）；保留为历史参考。详见 docs/FLAGSHIP_P1_HARDENING_REPORT.md。",
     "round_1_items": [
-      {"id": "P1-H1", "title": "HTTP handler 测试覆盖", "covers": "405 method-not-allowed、bad JSON 解析失败、DisallowUnknownFields 严格字段、/health 端点 GET / 非 GET 行为", "files_in_scope": ["cmd/flagship-server/**", "tests/flagship/**"]},
-      {"id": "P1-H2", "title": "NO low-score 分支测试", "covers": "Score < T2 且无硬冲突时输出 NO；reason_code 必须覆盖 FLAGSHIP_REASONER_NO_LOW_SCORE", "files_in_scope": ["tests/flagship/**"]},
-      {"id": "P1-H3", "title": "NormalizedWeights map copy", "covers": "state.Compute 返回的 NormalizedWeights 必须是副本，避免共享传入 map 的引用", "files_in_scope": ["internal/flagship/state/**", "tests/flagship/**"]},
-      {"id": "P1-H4", "title": "RejectInstruction ID 内容指纹", "covers": "output.NewRejectInstruction 生成的 ID 必须纳入 conflicting_items 内容摘要，不得只依赖 len(conflicts)", "files_in_scope": ["internal/flagship/output/**", "tests/flagship/**"]},
-      {"id": "P1-H5", "title": "CanonicalJSON error trace", "covers": "reasoner 中 CanonicalJSON 返回 error 不得静默忽略；出错时必须写入 trace 或 fallback digest reason", "files_in_scope": ["internal/flagship/reasoner/**", "internal/flagship/output/**", "tests/flagship/**"]}
+      {"id": "P1-H1", "title": "HTTP handler 测试覆盖", "covers": "405 method-not-allowed、bad JSON、DisallowUnknownFields、/health GET / 非 GET", "files_in_scope": ["cmd/flagship-server/**", "tests/flagship/**"]},
+      {"id": "P1-H2", "title": "NO low-score 分支测试", "covers": "Score < T2 且无硬冲突 → NO；reason_code = FLAGSHIP_REASONER_NO_LOW_SCORE", "files_in_scope": ["tests/flagship/**"]},
+      {"id": "P1-H3", "title": "NormalizedWeights map copy", "covers": "state.Compute 返回的 NormalizedWeights 必须是副本", "files_in_scope": ["internal/flagship/state/**", "tests/flagship/**"]},
+      {"id": "P1-H4", "title": "RejectInstruction ID 内容指纹", "covers": "output.NewRejectInstruction.ID 必须含 conflicting_items 内容摘要", "files_in_scope": ["internal/flagship/output/**", "tests/flagship/**"]},
+      {"id": "P1-H5", "title": "CanonicalJSON error trace", "covers": "reasoner 中 CanonicalJSON 返回 error 不得静默忽略", "files_in_scope": ["internal/flagship/reasoner/**", "internal/flagship/output/**", "tests/flagship/**"]}
+    ]
+  },
+
+  "flagship_coder_gateway_p0_scope": {
+    "status": "frozen",
+    "round_1_note": "Gateway P0 第一轮已在 v0.5.0-flagship-coder-gateway-p0 冻结（G1–G12）；保留为历史参考。详见 docs/FLAGSHIP_CODER_GATEWAY_P0_FREEZE_REPORT.md。",
+    "round_1_items": [
+      {"id": "G1", "title": "独立网关服务", "files_in_scope": ["cmd/flagship-coder-gateway/**", "internal/flagship/gateway/**"]},
+      {"id": "G2", "title": "Anthropic Messages 兼容形态最小骨架", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**", "schemas/flagship-gateway/**"]},
+      {"id": "G3", "title": "GET /health", "files_in_scope": ["cmd/flagship-coder-gateway/**", "internal/flagship/gateway/**"]},
+      {"id": "G4", "title": "GET /v1/models", "files_in_scope": ["internal/flagship/gateway/**"]},
+      {"id": "G5", "title": "POST /v1/messages/count_tokens", "files_in_scope": ["internal/flagship/gateway/**"]},
+      {"id": "G6", "title": "POST /v1/messages", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
+      {"id": "G7", "title": "生成前治理：调用旗舰版 reasoner", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
+      {"id": "G8", "title": "Mock LLM Provider", "files_in_scope": ["internal/flagship/provider/**"]},
+      {"id": "G9", "title": "生成后审查：再次调用旗舰版 reasoner", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
+      {"id": "G10", "title": "Claude Code 可识别 assistant message 响应", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
+      {"id": "G11", "title": "GatewayAuditRecord 审计结构（不写盘）", "files_in_scope": ["internal/flagship/gateway/**", "internal/flagship/coder/**"]},
+      {"id": "G12", "title": "最小测试用例", "files_in_scope": ["tests/flagship-gateway/**", "examples/flagship-gateway/**"]}
     ]
   },
 
@@ -206,18 +217,20 @@
     "merge_strategy": "squash",
     "source_branch_at_pr": "feat/flagship-p0-reasoner",
     "source_commit_before_squash": "7e45ff7",
-    "freeze_report": "docs/FLAGSHIP_P0_FREEZE_REPORT.md",
-    "next_stage_gate": "进入熵剪旗舰版 P1 前必须先做新一轮锚点滚动：更新 target_constant.single_goal / scope_id / scope_kind / authorization_radius.allowed_files / forbidden_boundaries / flagship_p1_scope，并同步 LONGMA_SOFT_GUARD.md / CLAUDE.md / AGENTS.md / .claude/settings.json。在新锚点未完成前，本仓库一律保持只读。",
-    "freeze_invariants_held": [
-      "core_engine_untouched",
-      "policies_manifest_untouched",
-      "openapi_and_sdk_untouched",
-      "core_shear_api_untouched",
-      "no_real_llm_integration",
-      "no_new_dependency",
-      "go_module_untouched",
-      "ledger_and_signature_untouched"
-    ]
+    "freeze_report": "docs/FLAGSHIP_P0_FREEZE_REPORT.md"
+  },
+
+  "flagship_p1_hardening_freeze": {
+    "status": "frozen",
+    "frozen_at": "2026-05-06",
+    "baseline_tag": "v0.4.0-flagship-p0",
+    "baseline_commit": "2ded4fb744d54b4bbe211f236d8d2efaa7eeb799",
+    "main_commit": "a6d6ed0469588a00c111888366f514c3740c9bca",
+    "tag": "v0.4.1-flagship-p1-hardening",
+    "pr": "#3",
+    "merge_strategy": "squash",
+    "source_branch_at_pr": "feat/flagship-p1-hardening",
+    "report": "docs/FLAGSHIP_P1_HARDENING_REPORT.md"
   },
 
   "flagship_coder_gateway_p0_freeze": {
@@ -231,101 +244,17 @@
     "merge_strategy": "squash",
     "source_branch_at_pr": "feat/flagship-coder-gateway-p0",
     "report": "docs/FLAGSHIP_CODER_GATEWAY_P0_FREEZE_REPORT.md",
-    "items_completed": [
-      {"id": "G1", "title": "独立网关服务", "landed_in": ["cmd/flagship-coder-gateway/main.go"]},
-      {"id": "G2", "title": "Anthropic Messages 兼容形态最小骨架", "landed_in": ["internal/flagship/gateway/types.go", "schemas/flagship-gateway/messages-request.schema.json", "schemas/flagship-gateway/messages-response.schema.json"]},
-      {"id": "G3", "title": "GET /health", "landed_in": ["internal/flagship/gateway/server.go"]},
-      {"id": "G4", "title": "GET /v1/models", "landed_in": ["internal/flagship/gateway/server.go", "internal/flagship/gateway/governance.go"]},
-      {"id": "G5", "title": "POST /v1/messages/count_tokens", "landed_in": ["internal/flagship/gateway/server.go", "internal/flagship/gateway/governance.go"]},
-      {"id": "G6", "title": "POST /v1/messages", "landed_in": ["internal/flagship/gateway/server.go", "internal/flagship/gateway/governance.go"]},
-      {"id": "G7", "title": "生成前治理：调用旗舰版 reasoner", "landed_in": ["internal/flagship/gateway/governance.go", "internal/flagship/coder/adapter.go"]},
-      {"id": "G8", "title": "Mock LLM Provider", "landed_in": ["internal/flagship/provider/provider.go", "internal/flagship/provider/mock.go"]},
-      {"id": "G9", "title": "生成后审查：再次调用 reasoner", "landed_in": ["internal/flagship/gateway/governance.go", "internal/flagship/coder/adapter.go"]},
-      {"id": "G10", "title": "Claude Code 可识别 assistant message 响应", "landed_in": ["internal/flagship/coder/assistant.go", "internal/flagship/gateway/governance.go"]},
-      {"id": "G11", "title": "GatewayAuditRecord 审计结构", "landed_in": ["internal/flagship/coder/audit.go"]},
-      {"id": "G12", "title": "最小测试用例（28 testfunc 全 PASS）", "landed_in": ["cmd/flagship-coder-gateway/main_test.go", "tests/flagship-gateway/gateway_e2e_test.go", "tests/flagship-gateway/adapter_test.go", "tests/flagship-gateway/mock_provider_test.go", "tests/flagship-gateway/count_tokens_test.go"]}
-    ],
     "next_stage_gate": "进入网关 P1 / P2 前必须先做新一轮锚点滚动：更新 target_constant.single_goal / scope_id / scope_kind / authorization_radius.allowed_files / forbidden_boundaries / flagship_coder_gateway_p1_scope，并同步 LONGMA_SOFT_GUARD.md / CLAUDE.md / AGENTS.md / .claude/settings.json。在新锚点未完成前，本仓库一律保持只读。",
-    "freeze_invariants_held": [
-      "core_engine_untouched",
-      "policies_manifest_untouched",
-      "openapi_and_sdk_untouched",
-      "core_shear_api_untouched",
-      "no_real_llm_integration",
-      "no_real_api_key_read",
-      "no_dotenv_or_secrets_read",
-      "no_new_dependency",
-      "go_module_untouched",
-      "ledger_and_signature_untouched",
-      "p0_p1_main_contract_unchanged",
-      "p0_p1_matrix_values_unchanged",
-      "p0_p1_thresholds_lambda_mu_t1_t2_unchanged",
-      "p0_p1_risk_factors_unchanged",
-      "p0_p1_output_field_set_unchanged",
-      "frozen_flagship_reasoner_internals_untouched",
-      "frozen_flagship_server_untouched",
-      "frozen_flagship_tests_untouched",
-      "frozen_flagship_schemas_dir_untouched",
-      "frozen_flagship_examples_dir_untouched",
-      "frozen_flagship_p0_p1_docs_untouched",
-      "no_streaming_or_tool_use_or_citation_or_cache_control_implemented",
-      "no_auth_no_rate_limit_no_tls"
-    ],
     "open_holds_for_next_round": [
-      "GH-1: 是否接真实 LLM Provider（Claude / OpenAI / Gemini / Qwen 等）",
-      "GH-2: 是否做 API Key 管理（.env / KMS / vault 集成）",
-      "GH-3: 是否做鉴权 / 限流 / TLS（生产化）",
-      "GH-4: 是否做 streaming（SSE / chunked）",
-      "GH-5: 是否做 tool_use / tool_result（function calling）",
-      "GH-6: 是否做真实 Claude Code 端到端适配测试（ANTHROPIC_BASE_URL 指向本网关）",
-      "GH-7: 是否接 Core ledger / signature 形成证据链",
-      "GH-8: 是否沉淀 Gateway 审计链（持久化 GatewayAuditRecord）",
+      "GH-1: 是否接真实 LLM Provider",
+      "GH-2: 是否做 API Key 管理",
+      "GH-3: 是否做鉴权 / 限流 / TLS",
+      "GH-4: 是否做 streaming",
+      "GH-5: 是否做 tool_use / tool_result",
+      "GH-6: 是否做真实 Claude Code 端到端适配测试 ← 本轮启动",
+      "GH-7: 是否接 Core ledger / signature",
+      "GH-8: 是否沉淀 Gateway 审计链",
       "GH-9: 是否进入可替代 Claude Code LLM backend 的本地代理模式"
-    ]
-  },
-
-  "flagship_p1_hardening_freeze": {
-    "status": "frozen",
-    "frozen_at": "2026-05-06",
-    "baseline_tag": "v0.4.0-flagship-p0",
-    "baseline_commit": "2ded4fb744d54b4bbe211f236d8d2efaa7eeb799",
-    "main_commit": "a6d6ed0469588a00c111888366f514c3740c9bca",
-    "tag": "v0.4.1-flagship-p1-hardening",
-    "pr": "#3",
-    "merge_strategy": "squash",
-    "source_branch_at_pr": "feat/flagship-p1-hardening",
-    "report": "docs/FLAGSHIP_P1_HARDENING_REPORT.md",
-    "items_completed": [
-      {"id": "P1-H1", "title": "HTTP handler 测试覆盖", "landed_in": ["cmd/flagship-server/main_test.go"]},
-      {"id": "P1-H2", "title": "NO low-score 分支测试", "landed_in": ["tests/flagship/p1_hardening_test.go"]},
-      {"id": "P1-H3", "title": "NormalizedWeights map copy", "landed_in": ["internal/flagship/state/matrix.go", "internal/flagship/reasoner/reasoner.go", "tests/flagship/p1_hardening_test.go"]},
-      {"id": "P1-H4", "title": "RejectInstruction ID 内容指纹", "landed_in": ["internal/flagship/output/token.go", "tests/flagship/p1_hardening_test.go"]},
-      {"id": "P1-H5", "title": "CanonicalJSON error trace", "landed_in": ["internal/flagship/reasoner/reasoner.go", "tests/flagship/p1_hardening_test.go"]}
-    ],
-    "next_stage_gate": "进入熵剪旗舰版 P1 第二轮或 P2 前必须先做新一轮锚点滚动：更新 target_constant.single_goal / scope_id / scope_kind / authorization_radius.allowed_files / forbidden_boundaries / flagship_p2_scope（或 flagship_p1_round_2_scope），并同步 LONGMA_SOFT_GUARD.md / CLAUDE.md / AGENTS.md / .claude/settings.json。在新锚点未完成前，本仓库一律保持只读。",
-    "freeze_invariants_held": [
-      "core_engine_untouched",
-      "policies_manifest_untouched",
-      "openapi_and_sdk_untouched",
-      "core_shear_api_untouched",
-      "no_real_llm_integration",
-      "no_new_dependency",
-      "go_module_untouched",
-      "ledger_and_signature_untouched",
-      "p0_main_contract_unchanged",
-      "p0_matrix_values_unchanged",
-      "p0_thresholds_lambda_mu_t1_t2_unchanged",
-      "p0_risk_factors_unchanged",
-      "p0_output_field_set_unchanged",
-      "schemas_flagship_dir_untouched",
-      "examples_flagship_dir_untouched"
-    ],
-    "open_holds_for_next_round": [
-      "H6: 是否做真实 JSON Schema runtime 校验（需新增 jsonschema 类依赖）",
-      "H7: 是否对接 Core ledger / Core signature 形成证据链",
-      "H8: 是否做鉴权 / 限流 / TLS（生产化）",
-      "H9: 是否进入 LLM Gateway / 编程大脑网关阶段",
-      "H10: 是否进入 P2 锚点滚动"
     ]
   },
 
@@ -351,6 +280,7 @@
       "cmd/flagship-server/**",
       "schemas/*.json",
       "schemas/flagship/**",
+      "schemas/flagship-gateway/**",
       "sdk/**",
       "policies/**",
       "integrations/**",
@@ -363,6 +293,8 @@
       "docs/FLAGSHIP_P0_DEV.md",
       "docs/FLAGSHIP_P0_FREEZE_REPORT.md",
       "docs/FLAGSHIP_P1_HARDENING_REPORT.md",
+      "docs/FLAGSHIP_CODER_GATEWAY_P0_DEV.md",
+      "docs/FLAGSHIP_CODER_GATEWAY_P0_FREEZE_REPORT.md",
       "tests/*.go",
       "tests/flagship/**",
       "ledger/**",
@@ -381,7 +313,7 @@
       "LONGMA_SOFT_GUARD.md",
       ".gitignore"
     ],
-    "forbidden_paths_note": "Coder Gateway P0 forbidden_paths 与 authorization_radius.allowed_files 互为闭包：网关骨架代码只能落入 internal/flagship/{gateway,provider,coder}/**、cmd/flagship-coder-gateway/**、schemas/flagship-gateway/**、examples/flagship-gateway/**、tests/flagship-gateway/**；docs 端只能改 docs/FLAGSHIP_CODER_GATEWAY_P0_DEV.md。Flagship P0/P1 已冻结的推理内核源码（internal/flagship/{mapper,rules,state,hold,output,reasoner}/**）、其服务（cmd/flagship-server/**）、其测试（tests/flagship/**）、其 schema（schemas/flagship/**）、其示例（examples/flagship/**）、其 dev / freeze / hardening 报告（docs/FLAGSHIP_P0_DEV.md / FLAGSHIP_P0_FREEZE_REPORT.md / FLAGSHIP_P1_HARDENING_REPORT.md）一律不得改动；网关代码只能在 runtime 通过 import 方式调用旗舰版 reasoner 包。所有既有 Core 代码、对外契约、产品文档、构建产物与 .gitignore 一律不得改动；AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 三份配套软约束文档自本锚点起继续列入 forbidden_paths，正式开发轮中不得再修改它们（再改必须先做新一轮锚点滚动）。",
+    "forbidden_paths_note": "Coder Gateway P1 Claude E2E forbidden_paths 与 authorization_radius.allowed_files 互为闭包：本轮代码 / 测试 / docs 只能落入 cmd/flagship-coder-gateway/**、internal/flagship/{gateway,coder,provider}/**、tests/flagship-gateway/**、examples/flagship-gateway/**、docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md。Gateway P0 已冻结的 schemas（schemas/flagship-gateway/**）与既有 dev / freeze 报告（docs/FLAGSHIP_CODER_GATEWAY_P0_DEV.md / FLAGSHIP_CODER_GATEWAY_P0_FREEZE_REPORT.md）自本锚点起被列入 forbidden_paths，体现 Gateway P0 主接口契约的冻结。Flagship P0/P1 已冻结的推理内核源码 / 服务 / 测试 / schema / 示例 / 三份 P0/P1 docs 继续 forbidden。所有既有 Core 代码、对外契约、产品文档、构建产物与 .gitignore 一律不得改动；AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 三份配套软约束文档自本锚点起继续列入 forbidden_paths，正式开发轮中不得再修改它们（再改必须先做新一轮锚点滚动）。",
     "forbidden_action_kinds": [
       "modify_existing_core_engine",
       "modify_shear_api",
@@ -389,10 +321,12 @@
       "modify_existing_schemas_files",
       "modify_flagship_schemas_dir",
       "modify_flagship_examples_dir",
+      "modify_flagship_gateway_schemas_dir",
       "modify_flagship_p0_p1_reasoner_internals",
       "modify_flagship_p0_p1_reasoner_server",
       "modify_flagship_p0_p1_reasoner_tests",
       "modify_flagship_p0_p1_dev_or_freeze_or_hardening_docs",
+      "modify_flagship_coder_gateway_p0_dev_or_freeze_docs",
       "modify_or_add_policy_pack",
       "modify_policies_manifest",
       "modify_integrations",
@@ -409,11 +343,13 @@
       "read_real_api_key_or_dotenv_or_secrets",
       "implement_streaming_or_tool_use_or_citation_or_cache_control",
       "change_p0_or_p1_main_contract",
-      "expand_round_1_beyond_g1_to_g12",
+      "change_gateway_p0_main_interface_contract",
+      "expand_round_1_beyond_e1_to_e9",
       "production_deployment",
       "call_external_llm_or_model_api",
       "implement_auth_rate_limit_or_tls",
       "wire_core_ledger_or_signature",
+      "modify_real_claude_code_user_settings",
       "git_commit_without_explicit_user_instruction",
       "git_push_without_explicit_user_instruction",
       "git_tag_or_release_without_explicit_user_instruction",
@@ -427,48 +363,49 @@
       "id": "AP1-goal-drift",
       "name_zh": "目标漂移",
       "description": "在执行过程中悄悄扩展、迁移或替换本轮目标。",
-      "rule": "本轮 single_goal 是 Flagship + LLM 编程大脑网关 P0 骨架（限 G1–G12 共 12 项）；任何把它扩张为完整龙码 AIOS / 知识资产化操作系统 / 能力工具系统 / 后台管理 / 多租户 SaaS / 规则自动生成、或在本轮中接入真实 LLM / 真实 API key、或加 G1–G12 之外的能力（含 streaming / tool_use / citation / cache_control / 鉴权 / 限流 / TLS）、或回头改 P0/P1 已冻结的推理内核源码 / 其服务 / 其测试 / 其 schema / 其示例 / 其 docs、或对接 Core ledger / signature / policies、或引入任何新依赖的尝试，都必须先停下并显式请用户授权。"
+      "rule": "本轮 single_goal 是 Claude Code 端到端适配验证（限 E1–E9 共 9 项）；任何把它扩张为完整龙码 AIOS / 知识资产化 / 能力工具系统 / 后台管理 / 多租户 SaaS / 规则自动生成、或在本轮中接入真实 LLM / 真实 API key、或加 streaming / tool_use / citation / cache_control / 鉴权 / 限流 / TLS / 任何 E1–E9 之外的能力、或回头改 P0/P1 已冻结的推理内核源码 / Gateway P0 主接口契约 / 已冻结 schemas 与 docs、或对接 Core ledger / signature / policies、或引入任何新依赖的尝试，都必须先停下并显式请用户授权。"
     },
     {
       "id": "AP2-action-overreach",
       "name_zh": "行动越权",
       "description": "未经用户当轮显式指令对禁止路径或外部系统执行写动作。",
-      "rule": "禁止对 forbidden_boundaries.forbidden_paths 写入；禁止 git commit / push / tag / release / 改 CI / 改外部依赖；禁止接入真实 LLM / 读取真实 API key；禁止读取 .env / .env.* / secrets/；禁止 go get / go mod tidy 引入新包；禁止对 P0/P1 已冻结的旗舰版推理内核源码 / 服务 / 测试 / schema / 示例 / docs 写入；禁止改 cmd/flagship-server。"
+      "rule": "禁止对 forbidden_boundaries.forbidden_paths 写入；禁止 git commit / push / tag / release / 改 CI / 改外部依赖；禁止接入真实 LLM / 读取真实 API key；禁止读取 .env / .env.* / secrets/；禁止 go get / go mod tidy 引入新包；禁止对 P0/P1 已冻结的旗舰版推理内核源码 / 服务 / 测试 / schema / 示例 / docs 写入；禁止对 Gateway P0 已冻结的 schemas 与 dev / freeze 报告写入；禁止改用户机器上的真实 Claude Code 配置。"
     },
     {
       "id": "AP3-path-drift",
       "name_zh": "路径漂移",
       "description": "对真实不存在的目录或文件进行操作；或路径凭空臆造。",
-      "rule": "任何写入前必须先用 Read / ls / find 在真实仓库验证父目录存在；不得依赖记忆中的路径。本轮 internal/flagship/gateway、internal/flagship/provider、internal/flagship/coder、cmd/flagship-coder-gateway、schemas/flagship-gateway、examples/flagship-gateway、tests/flagship-gateway 等目录在锚点发布时尚未创建，第一次写入需显式 mkdir -p 并对用户透明。docs/FLAGSHIP_CODER_GATEWAY_P0_DEV.md 是新文件，下划线与大小写必须严格匹配。不得自行新建 internal/longma / cmd/longma-coder 等错误路径。"
+      "rule": "任何写入前必须先用 Read / ls / find 在真实仓库验证父目录存在；不得依赖记忆中的路径。本轮 internal/flagship/{gateway,coder,provider}、cmd/flagship-coder-gateway、tests/flagship-gateway、examples/flagship-gateway 已存在（Gateway P0 已落地），不得自行新建错误路径或重命名既有目录。docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md 是新文件，下划线与大小写必须严格匹配。"
     },
     {
       "id": "AP4-hallucinated-judgment",
       "name_zh": "幻觉判断",
       "description": "凭空假设接口签名、函数行为、模块结构、字段名、版本号、文档原文。",
-      "rule": "不得引用未经 Read / grep 验证的代码、接口、字段、配置或文档片段；任何主张必须能给出文件路径与行号佐证；严禁参照训练数据中的“熵剪 / 龙码常数 / 三态推理 / Anthropic Messages 形状”印象；P0/P1 主契约（矩阵数值、λ μ T1 T2、风险因子、verdict 大写、字段名）以 v0.4.1-flagship-p1-hardening 实际仓库为准；Anthropic Messages 兼容形态以 Claude Code 实际期待的最小子集为准（不得自行扩展高级字段）。"
+      "rule": "不得引用未经 Read / grep 验证的代码、接口、字段、配置或文档片段；任何主张必须能给出文件路径与行号佐证；严禁参照训练数据中的“熵剪 / 龙码常数 / 三态推理 / Anthropic Messages 形状 / Claude Code 行为”印象；P0/P1 主契约（矩阵数值、λ μ T1 T2、风险因子、verdict 大写、字段名）以 v0.4.1-flagship-p1-hardening 实际仓库为准；Gateway P0 主接口（请求 / 响应 JSON 形状、stop_reason 取值、HOLD/NO 一律 200、GatewayAuditRecord 字段）以 v0.5.0-flagship-coder-gateway-p0 实际仓库为准；Claude Code 实测期待以真实运行结果为准，不得凭印象推断。"
     },
     {
       "id": "AP5-talk-only-completion",
       "name_zh": "嘴炮完成",
       "description": "声称完成而无可验证证据。",
-      "rule": "完成必须给出 changed_files、git diff --stat、go build / go vet / go test ./tests/flagship-gateway/... / go test ./... 输出、JSON 校验输出、P0/P1 主契约未破坏的检查、边界检查、G1–G12 各项状态、风险与 HOLD 项；任一项缺失视为未完成。"
+      "rule": "完成必须给出 changed_files、git diff --stat、go build / go vet / go test ./tests/flagship-gateway/... / go test ./... 输出、Claude Code 端到端实测记录（curl / shell 输出 / 截图描述）、P0/P1 主契约与 Gateway P0 主接口未破坏的检查、边界检查、E1–E9 各项状态、风险与 HOLD 项；任一项缺失视为未完成。"
     }
   ],
 
   "hold_conditions": [
     "拟动作目标超出 target_constant.single_goal 的本轮范围（例如要做完整龙码 AIOS / 多租户 / 规则自动生成 / 知识资产化）。",
-    "拟动作要在 Coder Gateway P0 中纳入 G1–G12 之外的任何能力 / 扩展 / 重构（含 streaming / tool_use / citation / cache_control / 鉴权 / 限流 / TLS / 真实 LLM）。",
+    "拟动作要在 Coder Gateway P1 Claude E2E 中纳入 E1–E9 之外的任何能力 / 扩展 / 重构（含 streaming / tool_use / citation / cache_control / 鉴权 / 限流 / TLS / 真实 LLM）。",
     "拟修改文件不在 authorization_radius.allowed_files 内。",
-    "拟修改文件落在 forbidden_boundaries.forbidden_paths 内（含 P0/P1 已冻结的推理内核源码 / 服务 / 测试 / schema / 示例 / docs）。",
-    "拟改动会改变 P0/P1 主契约（请求 / 响应 JSON 形状、verdict 大写、矩阵数值、λ μ T1 T2、风险因子、AlignmentTask / PermitToken / RejectInstruction / AuditRecord 字段）。",
+    "拟修改文件落在 forbidden_boundaries.forbidden_paths 内（含 P0/P1 已冻结推理内核源码 / 服务 / 测试 / schema / 示例 / docs，以及 Gateway P0 已冻结 schemas / dev / freeze 报告）。",
+    "拟改动会改变 P0/P1 主契约（矩阵数值、λ μ T1 T2、风险因子、verdict 大写、字段名）或 Gateway P0 主接口（请求 / 响应 JSON 形状、stop_reason 取值、HOLD/NO 一律 200、GatewayAuditRecord 字段）。",
     "需要新增产品级能力、policy pack、动 Core 引擎或修改 Core 对外契约。",
     "需要 git commit / push / tag / release，但用户当轮没有显式指令。",
     "需要接入真实 LLM 或调用外部模型 API、读取真实 API key / .env / secrets。",
     "需要新增依赖（go get / go mod tidy 引入新包）或升级既有依赖。",
     "需要对接 Core ledger / signature。",
     "需要做鉴权 / 限流 / TLS。",
+    "需要修改用户机器上的真实 Claude Code 配置。",
+    "无法在不修改 P0/P1 已冻结源码或 Gateway P0 已冻结契约的前提下完成本轮任务（说明任务设计本身越界）。",
     "无法用 Read / ls / grep 在真实仓库中验证某个被引用的文件 / 接口 / 字段 / 路径。",
-    "无法在不修改 P0/P1 已冻结源码的前提下完成本轮任务（说明任务设计本身越界）。",
     "缺少 completion_evidence_required 中任一项。"
   ],
 
@@ -478,25 +415,27 @@
     "引用接口签名 / 字段名 / 错误码 / 版本号前，先用 grep / Read 在真实代码或 schema 中验证。",
     "对 README / docs 现有产品说明的复述必须基于当下 Read，不得依赖记忆。",
     "P0/P1 主契约（矩阵数值、λ μ T1 T2、风险因子、verdict 大写、字段名、reason_code）以 v0.4.1-flagship-p1-hardening 实际仓库为准；不得改、不得猜。",
-    "Anthropic Messages 兼容形态以 Claude Code 实际期待的最小子集为准；本轮只实现请求 / 响应最小骨架（messages、role、content blocks、stop_reason、usage 占位），不得自行扩展 streaming / tool_use / citation / cache_control 等高级字段。",
-    "不得参照训练数据中的“熵剪 / 龙码常数 / 三态推理”印象，一切以仓库当前文件为准。"
+    "Gateway P0 主接口（请求 / 响应 JSON 形状、stop_reason 取值、HOLD/NO 一律 200、GatewayAuditRecord 字段）以 v0.5.0-flagship-coder-gateway-p0 实际仓库为准；不得改、不得猜。",
+    "Claude Code 实际期待 / 实际行为以真实运行结果为准，不得凭训练数据印象推断；任何 Anthropic 高级字段（streaming / tool_use / citation / cache_control / thinking / images / documents）本轮均不实现，遇到时记录为 P2 决策项即可。",
+    "不得参照训练数据中的“熵剪 / 龙码常数 / 三态推理 / Anthropic Messages 形状 / Claude Code 行为”印象，一切以仓库当前文件与实测结果为准。"
   ],
 
   "completion_evidence_required": [
     "changed_files: 本轮新增 / 修改的全部文件清单及用途。",
     "git_diff_stat: git diff --stat（含 untracked 列举）输出。",
-    "checks: 至少 go build ./internal/flagship/... ./cmd/flagship-server/... ./cmd/flagship-coder-gateway/...、go vet ./internal/flagship/... ./cmd/flagship-coder-gateway/... ./tests/flagship-gateway/...、go test ./tests/flagship-gateway/... 与 go test ./... 各跑一次的输出（含通过 / 失败列表）。",
-    "p0_p1_contract_check: 实测 P0/P1 主契约未被破坏（TestDefaultMatrixFixed 等守门测试继续通过；矩阵数值 / 阈值 / verdict 大写 / 输出字段集未变；P0 / P1 各 freeze / hardening 报告对应的源码未被改动）。",
-    "boundary_check: 是否触碰 forbidden_paths（含 P0/P1 已冻结的推理内核源码 / 服务 / 测试 / schema / 示例 / docs）、是否修改 Core 引擎 / policies/manifest.json / openapi.yaml / sdk / Docker / README / SUPPORT、是否动 Core /shear、是否接入真实 LLM / Core ledger / Core signature、是否引入新依赖、是否动 go.mod / go.sum、是否在 G1–G12 之外做了能力扩展。",
-    "round_1_items_status: G1 / G2 / ... / G12 每项的实现状态（已实现 / 未实现 / 部分实现）+ 触达文件 + 对应测试。",
-    "next_stage_readiness: 是否可以进入“熵剪旗舰版 + 编程大脑网关 P1”或下一阶段，以及若进入需先做哪些锚点滚动。",
-    "risks_and_holds: 风险、待澄清项、HOLD 项。"
+    "checks: 至少 go build ./internal/flagship/... ./cmd/flagship-server/... ./cmd/flagship-coder-gateway/...、go vet ./internal/flagship/... ./cmd/flagship-coder-gateway/... ./tests/flagship-gateway/...、go test ./tests/flagship-gateway/... ./cmd/flagship-coder-gateway/... 与 go test ./... 各跑一次的输出（含通过 / 失败列表）。",
+    "claude_code_e2e_record: Claude Code 端到端实测记录（curl / shell 输出 / 关键响应片段），至少覆盖 /v1/models、/v1/messages/count_tokens、/v1/messages 三个端点，与 YES / HOLD / NO 三态。",
+    "p0_p1_and_gateway_p0_contract_check: 实测 P0/P1 主契约（TestDefaultMatrixFixed 等守门）与 Gateway P0 主接口（请求 / 响应 JSON 形状 / stop_reason / HOLD-NO-200 / GatewayAuditRecord 字段）均未被破坏。",
+    "boundary_check: 是否触碰 forbidden_paths（含 P0/P1 已冻结推理内核源码 / 服务 / 测试 / schema / 示例 / docs，以及 Gateway P0 已冻结 schemas / dev / freeze 报告）、是否修改 Core 引擎 / policies/manifest.json / openapi.yaml / sdk / Docker / README / SUPPORT、是否动 Core /shear、是否接入真实 LLM / Core ledger / Core signature、是否引入新依赖、是否动 go.mod / go.sum、是否在 E1–E9 之外做了能力扩展。",
+    "round_1_items_status: E1 / E2 / ... / E9 每项的实现状态（已实现 / 未实现 / 部分实现）+ 触达文件 + 对应实测证据。",
+    "next_stage_readiness: 是否可以进入“熵剪旗舰版编程大脑网关 P2”或下一阶段，以及若进入需先做哪些锚点滚动。",
+    "risks_and_holds: 风险、待澄清项、HOLD 项，特别是 Claude Code 实测中暴露的 P0 不足（如真实期待 streaming / tool_use 等）。"
   ],
 
   "companions": {
     "human_readable_charter": "LONGMA_SOFT_GUARD.md",
     "agent_entrypoints": ["AGENTS.md", "CLAUDE.md"],
     "machine_guard": ".claude/settings.json",
-    "note": "AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 已与本锚点同步至“熵剪旗舰版 + LLM 编程大脑网关 P0 软约束”表述；这三份配套文档自本锚点起继续列入 forbidden_paths，正式开发轮中不得再修改（再改必须先做新一轮锚点滚动）。.claude/settings.json 的 permissions.deny 兜底已与本锚点 forbidden_paths 对齐：网关 P0 dev 路径（internal/flagship/{gateway,provider,coder}/**、cmd/flagship-coder-gateway/**、schemas/flagship-gateway/**、examples/flagship-gateway/**、tests/flagship-gateway/**、docs/FLAGSHIP_CODER_GATEWAY_P0_DEV.md）让出可写空间；P0/P1 已冻结的推理内核源码（internal/flagship/{mapper,rules,state,hold,output,reasoner}/**）、其服务（cmd/flagship-server/**）、其测试（tests/flagship/**）、其 schema（schemas/flagship/**）、其示例（examples/flagship/**）、其 dev / freeze / hardening docs 自本轮起被显式 deny，体现 P0/P1 冻结相对网关 P0 的契约收紧。"
+    "note": "AGENTS.md / CLAUDE.md / LONGMA_SOFT_GUARD.md 已与本锚点同步至“熵剪旗舰版编程大脑网关 P1 Claude Code 端到端适配验证软约束”表述；这三份配套文档自本锚点起继续列入 forbidden_paths，正式开发轮中不得再修改（再改必须先做新一轮锚点滚动）。.claude/settings.json 的 permissions.deny 兜底已与本锚点 forbidden_paths 对齐：网关 P1 dev 路径（cmd/flagship-coder-gateway/**、internal/flagship/{gateway,coder,provider}/**、tests/flagship-gateway/**、examples/flagship-gateway/**、docs/FLAGSHIP_CODER_GATEWAY_P1_CLAUDE_E2E.md）让出可写空间；Gateway P0 已冻结的 schemas（schemas/flagship-gateway/**）与 dev / freeze docs（docs/FLAGSHIP_CODER_GATEWAY_P0_DEV.md / FLAGSHIP_CODER_GATEWAY_P0_FREEZE_REPORT.md）自本轮起被显式 deny，体现 Gateway P0 主接口契约的冻结收紧。"
   }
 }
