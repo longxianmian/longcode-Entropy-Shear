@@ -207,6 +207,51 @@
     ]
   },
 
+  "flagship_p1_hardening_freeze": {
+    "status": "frozen",
+    "frozen_at": "2026-05-06",
+    "baseline_tag": "v0.4.0-flagship-p0",
+    "baseline_commit": "2ded4fb744d54b4bbe211f236d8d2efaa7eeb799",
+    "main_commit": "a6d6ed0469588a00c111888366f514c3740c9bca",
+    "tag": "v0.4.1-flagship-p1-hardening",
+    "pr": "#3",
+    "merge_strategy": "squash",
+    "source_branch_at_pr": "feat/flagship-p1-hardening",
+    "report": "docs/FLAGSHIP_P1_HARDENING_REPORT.md",
+    "items_completed": [
+      {"id": "P1-H1", "title": "HTTP handler 测试覆盖", "landed_in": ["cmd/flagship-server/main_test.go"]},
+      {"id": "P1-H2", "title": "NO low-score 分支测试", "landed_in": ["tests/flagship/p1_hardening_test.go"]},
+      {"id": "P1-H3", "title": "NormalizedWeights map copy", "landed_in": ["internal/flagship/state/matrix.go", "internal/flagship/reasoner/reasoner.go", "tests/flagship/p1_hardening_test.go"]},
+      {"id": "P1-H4", "title": "RejectInstruction ID 内容指纹", "landed_in": ["internal/flagship/output/token.go", "tests/flagship/p1_hardening_test.go"]},
+      {"id": "P1-H5", "title": "CanonicalJSON error trace", "landed_in": ["internal/flagship/reasoner/reasoner.go", "tests/flagship/p1_hardening_test.go"]}
+    ],
+    "next_stage_gate": "进入熵剪旗舰版 P1 第二轮或 P2 前必须先做新一轮锚点滚动：更新 target_constant.single_goal / scope_id / scope_kind / authorization_radius.allowed_files / forbidden_boundaries / flagship_p2_scope（或 flagship_p1_round_2_scope），并同步 LONGMA_SOFT_GUARD.md / CLAUDE.md / AGENTS.md / .claude/settings.json。在新锚点未完成前，本仓库一律保持只读。",
+    "freeze_invariants_held": [
+      "core_engine_untouched",
+      "policies_manifest_untouched",
+      "openapi_and_sdk_untouched",
+      "core_shear_api_untouched",
+      "no_real_llm_integration",
+      "no_new_dependency",
+      "go_module_untouched",
+      "ledger_and_signature_untouched",
+      "p0_main_contract_unchanged",
+      "p0_matrix_values_unchanged",
+      "p0_thresholds_lambda_mu_t1_t2_unchanged",
+      "p0_risk_factors_unchanged",
+      "p0_output_field_set_unchanged",
+      "schemas_flagship_dir_untouched",
+      "examples_flagship_dir_untouched"
+    ],
+    "open_holds_for_next_round": [
+      "H6: 是否做真实 JSON Schema runtime 校验（需新增 jsonschema 类依赖）",
+      "H7: 是否对接 Core ledger / Core signature 形成证据链",
+      "H8: 是否做鉴权 / 限流 / TLS（生产化）",
+      "H9: 是否进入 LLM Gateway / 编程大脑网关阶段",
+      "H10: 是否进入 P2 锚点滚动"
+    ]
+  },
+
   "forbidden_boundaries": {
     "forbidden_paths": [
       "internal/api/**",
