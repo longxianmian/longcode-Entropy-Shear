@@ -104,6 +104,29 @@
     }
   },
 
+  "flagship_p0_freeze": {
+    "status": "frozen",
+    "frozen_at": "2026-05-06",
+    "main_commit": "2ded4fb744d54b4bbe211f236d8d2efaa7eeb799",
+    "tag": "v0.4.0-flagship-p0",
+    "pr": "#1",
+    "merge_strategy": "squash",
+    "source_branch_at_pr": "feat/flagship-p0-reasoner",
+    "source_commit_before_squash": "7e45ff7",
+    "freeze_report": "docs/FLAGSHIP_P0_FREEZE_REPORT.md",
+    "next_stage_gate": "进入熵剪旗舰版 P1 前必须先做新一轮锚点滚动：更新 target_constant.single_goal / scope_id / scope_kind / authorization_radius.allowed_files / forbidden_boundaries / flagship_p1_scope，并同步 LONGMA_SOFT_GUARD.md / CLAUDE.md / AGENTS.md / .claude/settings.json。在新锚点未完成前，本仓库一律保持只读。",
+    "freeze_invariants_held": [
+      "core_engine_untouched",
+      "policies_manifest_untouched",
+      "openapi_and_sdk_untouched",
+      "core_shear_api_untouched",
+      "no_real_llm_integration",
+      "no_new_dependency",
+      "go_module_untouched",
+      "ledger_and_signature_untouched"
+    ]
+  },
+
   "flagship_p0_scope": {
     "note": "熵剪旗舰版 P0 龙码三态逻辑推理内核开发范围，仅作为目标边界声明；任一组件的实现必须严格落入 authorization_radius.allowed_files。本轮（锚点滚动轮）不实现任何一项。",
     "components": [
