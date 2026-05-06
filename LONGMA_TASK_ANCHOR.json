@@ -1,0 +1,160 @@
+{
+  "schema": "longma.task-anchor/v0",
+  "scope_id": "longma-soft-guard-p0",
+  "scope_kind": "development-time-soft-constraint",
+  "issued_at": "2026-05-06",
+  "repository": "entropy-shear",
+  "repository_edition": "Core (Apache-2.0)",
+  "repository_version_at_issue": "v0.3.0-p3",
+  "main_branch": "main",
+
+  "core_product_boundary": {
+    "is_core_product_feature": false,
+    "enters_policies_dir": false,
+    "enters_policies_manifest": false,
+    "represents_core_implements_longma_constant": false,
+    "note": "本软约束包仅治理 AI 编程代理的开发过程，不属于熵剪 Core 的对外能力，不代表 Core 实现 Longma Constant。Longma Constant 仍然属于 Pro / Flagship 路线，详见 docs/PRODUCT_MATRIX.md 与 README.md 的 Edition Boundary 段落。"
+  },
+
+  "target_constant": {
+    "single_goal": "在现有 Entropy Shear Core 之上准备开发熵剪旗舰版（Flagship），但本轮只建立开发期软约束包 P0，不开发任何核心代码。",
+    "current_round_deliverables_only": [
+      "LONGMA_TASK_ANCHOR.json",
+      "LONGMA_SOFT_GUARD.md",
+      "AGENTS.md",
+      "CLAUDE.md",
+      ".claude/settings.json"
+    ],
+    "non_goals": [
+      "实现 Longma Constant 进 Core",
+      "实现五行冲突治理 / AI 规则编译器 / 影子模式 / 高级审计账本",
+      "修改三态判定逻辑或任何 Core 引擎代码",
+      "新增 Core 产品 policy pack 或更新 policies/manifest.json",
+      "改动 Core 对外契约（API / Schema / SDK / OpenAPI）",
+      "改动产品文档（README / README_CN / SUPPORT / docs/）",
+      "改动构建与发布产物（Dockerfile / docker-compose / go.mod / go.sum）"
+    ]
+  },
+
+  "authorization_radius": {
+    "allowed_files": [
+      "LONGMA_TASK_ANCHOR.json",
+      "LONGMA_SOFT_GUARD.md",
+      "AGENTS.md",
+      "CLAUDE.md",
+      ".claude/settings.json"
+    ],
+    "allowed_action_kinds": [
+      "read_existing_files_for_verification",
+      "list_existing_directories_for_verification",
+      "grep_existing_files_for_verification",
+      "create_listed_file",
+      "modify_listed_file"
+    ]
+  },
+
+  "forbidden_boundaries": {
+    "forbidden_paths": [
+      "internal/**",
+      "cmd/**",
+      "schemas/**",
+      "sdk/**",
+      "policies/**",
+      "integrations/**",
+      "docs/**",
+      "tests/**",
+      "ledger/**",
+      "README.md",
+      "README_CN.md",
+      "SUPPORT.md",
+      "openapi.yaml",
+      "go.mod",
+      "go.sum",
+      "Dockerfile",
+      "docker-compose.yml"
+    ],
+    "forbidden_action_kinds": [
+      "modify_engine_code",
+      "modify_or_add_policy_pack",
+      "modify_policies_manifest",
+      "modify_schemas",
+      "modify_openapi",
+      "modify_sdk",
+      "modify_integration_examples",
+      "modify_product_docs_or_readme",
+      "modify_dockerfile_or_compose",
+      "modify_go_module_files",
+      "git_commit_without_explicit_user_instruction",
+      "git_push_without_explicit_user_instruction",
+      "git_tag_or_release_without_explicit_user_instruction",
+      "install_or_upgrade_packages_without_explicit_user_instruction",
+      "delete_or_rewrite_files_in_forbidden_paths",
+      "ci_or_external_system_changes"
+    ]
+  },
+
+  "governed_anti_patterns": [
+    {
+      "id": "AP1-goal-drift",
+      "name_zh": "目标漂移",
+      "description": "在执行过程中悄悄扩展、迁移或替换本轮目标。",
+      "rule": "凡偏离 target_constant.single_goal 或越出 authorization_radius 的动作，必须先停下并显式请用户授权。"
+    },
+    {
+      "id": "AP2-action-overreach",
+      "name_zh": "行动越权",
+      "description": "未经用户当轮显式指令对禁止路径或外部系统执行写动作。",
+      "rule": "禁止对 forbidden_boundaries.forbidden_paths 写入；禁止 git commit / push / tag / release / 改 CI / 改外部依赖，除非用户当轮显式指令。"
+    },
+    {
+      "id": "AP3-path-drift",
+      "name_zh": "路径漂移",
+      "description": "对真实不存在的目录或文件进行操作；或路径凭空臆造。",
+      "rule": "任何写入前必须先用 Read / ls / find 在真实仓库验证父目录存在；不得依赖记忆中的路径。"
+    },
+    {
+      "id": "AP4-hallucinated-judgment",
+      "name_zh": "幻觉判断",
+      "description": "凭空假设接口签名、函数行为、模块结构、字段名、版本号、文档原文。",
+      "rule": "不得引用未经 Read / grep 验证的代码、接口、字段、配置或文档片段；任何主张必须能给出文件路径与行号佐证；不得参照训练数据中的“熵剪 / 龙码常数”印象。"
+    },
+    {
+      "id": "AP5-talk-only-completion",
+      "name_zh": "嘴炮完成",
+      "description": "声称完成而无可验证证据。",
+      "rule": "完成必须给出 changed_files、git diff --stat、检查结果、边界检查、风险与 HOLD 项；任一项缺失视为未完成。"
+    }
+  ],
+
+  "hold_conditions": [
+    "拟动作目标超出 target_constant.single_goal 的本轮范围。",
+    "拟修改文件不在 authorization_radius.allowed_files 内。",
+    "拟修改文件落在 forbidden_boundaries.forbidden_paths 内。",
+    "需要新增产品级能力、policy pack 或动 Core 引擎。",
+    "需要 git commit / push / tag / release 但未获得用户当轮显式指令。",
+    "无法用 Read / ls / grep 在真实仓库中验证某个被引用的文件 / 接口 / 字段 / 路径。",
+    "缺少 completion_evidence_required 中任一项。"
+  ],
+
+  "no_hallucination_rules": [
+    "任何写动作前，先用 Read 读取目标文件（若已存在）。",
+    "任何对仓库结构的论断前，先用 ls / find 在真实目录验证。",
+    "引用接口签名 / 字段名 / 错误码 / 版本号前，先用 grep / Read 在真实代码或 schema 中验证。",
+    "对 README / docs 现有产品说明的复述必须基于当下 Read，不得依赖记忆。",
+    "不得参照训练数据中的“熵剪 / 龙码常数”印象，一切以仓库当前文件为准。"
+  ],
+
+  "completion_evidence_required": [
+    "changed_files: 本轮新增 / 修改的全部文件清单及用途。",
+    "git_diff_stat: git diff --stat（含 untracked 列举）输出。",
+    "checks: 执行过的校验命令及结果（本轮以仓库结构 / 路径校验为主，不要求跑 Go 测试）。",
+    "boundary_check: 是否触碰 forbidden_paths、是否修改 policies/manifest.json、是否动 Core 引擎代码。",
+    "risks_and_holds: 风险、待澄清项、HOLD 项。"
+  ],
+
+  "companions": {
+    "human_readable_charter": "LONGMA_SOFT_GUARD.md",
+    "agent_entrypoints": ["AGENTS.md", "CLAUDE.md"],
+    "machine_guard": ".claude/settings.json"
+  }
+}
