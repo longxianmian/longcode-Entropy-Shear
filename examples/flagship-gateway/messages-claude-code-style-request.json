@@ -1,0 +1,28 @@
+{
+  "model": "claude-sonnet-4-5",
+  "max_tokens": 1024,
+  "system": "you are claude, an ai coding assistant integrated with the entropy-shear flagship coder gateway. follow the user's coding request precisely and avoid speculation.",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "hi, please help me write a small Go function"}
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {"type": "text", "text": "sure — what should the function do?"}
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "it should compute the sum of two integers and return the result"}
+      ]
+    }
+  ],
+  "metadata": {
+    "user_id": "user_test_001"
+  }
+}
